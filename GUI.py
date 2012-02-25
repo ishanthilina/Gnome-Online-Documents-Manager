@@ -13,7 +13,7 @@ except:
 	sys.exit(1)
 
 
-class GUIMaanger():
+class GUIManager():
 	"""Provides an interface to access the GUI functionality
 	"""
 	
@@ -75,12 +75,16 @@ class ImportGDocsWindow():
 		col_folders.set_resizable(True)
 		DocTreeView.append_column(col_folders)
 
-                DocList=gtk.ListStore(int,str,str)
+                DocList=gtk.ListStore(str,str,str)
 		DocTreeView.set_model(DocList)
 		
-		
+		for doc in self._gdam.get_all_documents().entry:
+			data= self._gdam.get_doc_data(doc)
+			#print dir(data)
+			
+			DocList.append([data[0],data[1],"Folder"])
 
-                itr=DocList.append([1,'2','3'])
+			#itr=DocList.append([1,'2','3'])
 		#DocList.insert_after(itr,[2,"2",'2'])
 		#DocList.append([2,"ssssss2"])
 		

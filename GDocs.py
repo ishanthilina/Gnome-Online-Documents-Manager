@@ -93,7 +93,15 @@ class GDActionsManager():
         for entry in feed.entry:
             self.download_doc(entry,'/home/ishan/','name')
             break
-        
+
+    def get_all_documents(self):
+        """Get and display all resources, using pagination."""
+        client=self.__create_client()
+
+        feed = client.GetResources()
+
+
+        return feed
        
 
 
@@ -196,6 +204,6 @@ class GDActionsManager():
             for title in  data.GetAttributes(tag='title'):
                 print title.value
 
-        return entr.title.text
+        return [entry.GetResourceType(),entry.title.text]
 
 
