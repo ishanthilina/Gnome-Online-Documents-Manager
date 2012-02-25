@@ -25,12 +25,16 @@ class MainWindow:
 		# if (self.window):
 		# 	self.window.connect("destroy", gtk.main_quit)
                 #text.insertString( cursor, "in class\n", 0 )
-                filename = "/home/ishan/4sep/1.ui"
+                #load the 1.glade
+                filename = "/home/ishan/4sep/1.glade"
 		builder = gtk.Builder()
 		builder.add_from_file(filename)
 		builder.connect_signals(self)
-		window=builder.get_object('window')
-		window.show_all()
+		DocList=builder.get_object('DocList')
+		print dir(DocList)
+		#comment the following lines
+		#window=builder.get_object('window')
+		#window.show_all()
 
 	def on_buttonGenerate_clicked(self, widget):
 		print "You clicked the button"

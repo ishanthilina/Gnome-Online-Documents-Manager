@@ -6,15 +6,18 @@
       <!-- column-name Type -->
       <column type="GtkSortType"/>
     </columns>
+    <data>
+      <row>
+        <col id="0">ascending</col>
+      </row>
+    </data>
   </object>
   <object class="GtkWindow" id="window1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="resizable">False</property>
     <property name="default_width">440</property>
     <property name="default_height">250</property>
     <property name="icon_name">emblem-default</property>
-    <signal name="destroy" handler="destroy_all" swapped="no"/>
     <child>
       <object class="GtkVBox" id="box1">
         <property name="visible">True</property>
@@ -192,9 +195,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkHBox" id="box2">
-            <property name="width_request">555</property>
-            <property name="height_request">108</property>
+          <object class="GtkBox" id="box2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
@@ -202,7 +203,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="model">DocList</property>
-                <signal name="row-activated" handler="on_row_activated" swapped="no"/>
                 <child internal-child="selection">
                   <object class="GtkTreeSelection" id="treeview-selection3"/>
                 </child>
