@@ -196,6 +196,6 @@ class GDActionsManager():
             for title in  data.GetAttributes(tag='title'):
                 print title.value
 
-        
+        return entr.title.text
 
 

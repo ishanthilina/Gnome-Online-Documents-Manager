@@ -1,4 +1,6 @@
 import sys
+import GDocs
+import Configuration
 try:
  	import pygtk
   	pygtk.require("2.0")
@@ -11,9 +13,100 @@ except:
 	sys.exit(1)
 
 
+class GUIMaanger():
+	"""Provides an interface to access the GUI functionality
+	"""
+	
+	def __init__(self):
+		"""
+		"""
+		#TODO: Find an elegant way to do this.
+		self._confMan=Configuration.ConfigurationManager()
+		account=self._confMan.get_account()
+		self._gdcm=GDocs.GDClientManager()
+		self._gdam=GDocs.GDActionsManager(self._gdcm)
+		self._gdcm.authenticate_client(account)
 
+
+	def show_import_window(self):
+		"""Shows the import Google Documents window"""
+
+                window=ImportGDocsWindow(self._gdam)
+		#window=MainWindow()
 		
-        
+
+	
+
+
+class ImportGDocsWindow():
+	"""Shows the import Google Docs windows
+	"""
+	
+	def __init__(self, gdam):
+		"""
+		
+                Arguments:
+                - `gdam`:GDocs.GDActionsManager
+                """
+		self._gdam = gdam
+
+                #load and setup the GUI components
+
+                #TODO: Create a good way to get the file locations.From the
+		#ConfigurationManager may be?
+		filename = "/home/ishan/4sep/1.glade"
+		builder = gtk.Builder()
+		builder.add_from_file(filename)
+		builder.connect_signals(self)
+		
+		DocTreeView=builder.get_object('DocTreeView')
+		
+
+                
+		col_type=gtk.TreeViewColumn('Type')
+		col_type.set_resizable(True)
+		DocTreeView.append_column(col_type)
+
+                col_name=gtk.TreeViewColumn('Name',gtk.CellRendererText(),text=1)
+		col_name.set_resizable(True)
+		DocTreeView.append_column(col_name)
+
+                col_folders=gtk.TreeViewColumn('In Folders',gtk.CellRendererText(),text=2)
+		col_folders.set_resizable(True)
+		DocTreeView.append_column(col_folders)
+
+                DocList=gtk.ListStore(int,str,str)
+		DocTreeView.set_model(DocList)
+		
+		
+
+                itr=DocList.append([1,'2','3'])
+		#DocList.insert_after(itr,[2,"2",'2'])
+		#DocList.append([2,"ssssss2"])
+		
+
+                cell = gtk.CellRendererText()
+		col_type.pack_start(cell,False)
+		col_type.add_attribute(cell,"text",0)
+
+	def destroy_all(self,arg):
+		"""Destroy everything
+		"""
+		gtk.main_quit()
+
+	def on_row_activated(self, treeview,path,column):
+		"""
+		
+                Arguments:
+                - `treeview`:
+                - `path`:
+                - `column`:
+                """
+		print "O.o"
+
+
+
+
 class MainWindow:
         """This is an Hello World GTK application"""
 
@@ -73,6 +166,10 @@ class MainWindow:
                 """
 		print "O.o"
 
+
+
 if __name__ == "__main__":
-	hwg = MainWindow()
+	#hwg = MainWindow()
+	guiM=GUIMaanger()
+	guiM.show_import_window()
 	gtk.main()
