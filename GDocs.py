@@ -188,21 +188,21 @@ class GDActionsManager():
         """
         
         
-        print 'Doc type:', entry.GetResourceType()
-        print 'Doc name: ', entry.title.text
-        print 'Resource id:', entry.resource_id
-        print 'Lables :'
-        for label in entry.GetLabels():
-            print label,
+        # print 'Doc type:', entry.GetResourceType()
+        # print 'Doc name: ', entry.title.text
+        # print 'Resource id:', entry.resource_id
+        # print 'Lables :'
+        # for label in entry.GetLabels():
+        #     print label,
 
-        print
+        # print
 
-        print
-        print 'Collections (Folders): '
+        # print
+        # print 'Collections (Folders): '
 
-        for data in entry.InCollections():
-            for title in  data.GetAttributes(tag='title'):
-                print title.value
+        # for data in entry.InCollections():
+        #     for title in  data.GetAttributes(tag='title'):
+        #         print title.value
 
         return [entry.GetResourceType(),entry.title.text]
 

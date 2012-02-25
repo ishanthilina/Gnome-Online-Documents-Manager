@@ -60,6 +60,7 @@ class ImportGDocsWindow():
 		builder.connect_signals(self)
 		
 		DocTreeView=builder.get_object('DocTreeView')
+		self._entry_fileSaveLocation=builder.get_object('fileSaveLocation')
 		
 
                 
@@ -107,6 +108,34 @@ class ImportGDocsWindow():
                 - `column`:
                 """
 		print "O.o"
+
+	def on_set_save_location(self,arg1,arg2,arg3):
+		"""
+		"""
+		# print type(arg1)
+		# print type(arg2)
+		# print type(arg3)
+		# print (DocumentsSaveAsWindow())
+		dialog_buttons = (gtk.STOCK_CANCEL
+					, gtk.RESPONSE_CANCEL
+					, gtk.STOCK_SAVE
+					, gtk.RESPONSE_OK)
+		file_dialog = gtk.FileChooserDialog(title="Select Save Location"
+				, action=gtk.FILE_CHOOSER_ACTION_SAVE
+				, buttons=dialog_buttons)
+		filter = gtk.FileFilter()
+		filter.set_name("*.odt")
+		filter.add_pattern("*.odt")
+		file_dialog.add_filter(filter)
+
+                result = ""
+		if file_dialog.run() == gtk.RESPONSE_OK:
+			result = file_dialog.get_filename()
+			
+		file_dialog.destroy()
+	
+		self._entry_fileSaveLocation.set_text(result)
+
 
 
 
