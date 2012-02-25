@@ -174,6 +174,6 @@ class MainWindow:
 
 if __name__ == "__main__":
 	#hwg = MainWindow()
-	guiM=GUIMaanger()
+	guiM=GUIManager()
 	guiM.show_import_window()
 	gtk.main()
