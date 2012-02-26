@@ -31,7 +31,7 @@ class GUIManager():
 	def show_import_window(self):
 		"""Shows the import Google Documents window"""
 
-                window=ImportGDocsWindow(self._gdam)
+                window=ImportGDocsWindow(self._gdam,self._confMan)
 		#window=MainWindow()
 		
 
@@ -42,11 +42,12 @@ class ImportGDocsWindow():
 	"""Shows the import Google Docs windows
 	"""
 	
-	def __init__(self, gdam):
+	def __init__(self, gdam,confMan):
 		"""
 		
                 Arguments:
                 - `gdam`:GDocs.GDActionsManager
+		- `confMan`:Configuration.ConfigurationManager
                 """
 		self._gdam = gdam
 
@@ -54,7 +55,7 @@ class ImportGDocsWindow():
 
                 #TODO: Create a good way to get the file locations.From the
 		#ConfigurationManager may be?
-		filename = "/home/ishan/4sep/1.glade"
+		filename = confMan.get_system_path()+"1.glade"
 		builder = gtk.Builder()
 		builder.add_from_file(filename)
 		builder.connect_signals(self)
@@ -136,9 +137,42 @@ class ImportGDocsWindow():
 	
 		self._entry_fileSaveLocation.set_text(result)
 
+	def wtf(self,arg ):
+		"""
+		"""
+		pass
 
 
 
+class DocumentsSaveAsWindow():
+	"""Logic for the Save As window for documents
+    """
+	
+	def __init__(self, ):
+		"""
+        """
+
+	#TODO:  Create a good way to get the file locations.From the
+		#ConfigurationManager may be?
+		filename = "/home/ishan/4sep/DocumentSaveDialog.glade"
+		builder = gtk.Builder()
+		builder.add_from_file(filename)
+		builder.connect_signals(self)
+		
+
+	def show_error_dlg(self, error_string):
+		"""This Function is used to show an error dialog when
+	an error occurs.
+	error_string - The error string that will be displayed
+	on the dialog.
+	"""
+		error_dlg = gtk.MessageDialog(type=gtk.MESSAGE_ERROR
+					      , message_format=error_string
+					      , buttons=gtk.BUTTONS_OK)
+		error_dlg.run()
+		error_dlg.destroy()
+
+	
 
 class MainWindow:
         """This is an Hello World GTK application"""

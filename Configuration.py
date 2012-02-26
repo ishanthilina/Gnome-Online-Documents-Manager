@@ -1,4 +1,5 @@
 import Authentication
+import os
 
 class ConfigurationManager():
     """Provides an interface to access and configure the extension settings
@@ -18,3 +19,8 @@ class ConfigurationManager():
 
         account=self._am.get_accounts().pop()
         return account
+
+    def get_system_path(self, ):
+        """Returns the path of the place where the python scripts are
+        """
+        return os.path.expanduser('~')+'/4sep/'

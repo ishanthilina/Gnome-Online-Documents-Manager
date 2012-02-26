@@ -42,6 +42,7 @@
                         <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
+                        <signal name="activate" handler="on_set_save_location" swapped="no"/>
                       </object>
                     </child>
                     <child>
@@ -253,6 +254,7 @@
                 <property name="use_action_appearance">False</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
+                <signal name="toggled" handler="on_set_save_location" swapped="no"/>
               </object>
               <packing>
                 <property name="x">28</property>
@@ -270,6 +272,7 @@
                 <property name="use_action_appearance">False</property>
                 <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
+                <signal name="toggled" handler="wtf" swapped="no"/>
               </object>
               <packing>
                 <property name="x">28</property>
