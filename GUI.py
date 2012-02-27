@@ -143,14 +143,18 @@ class ImportGDocsWindow():
 	def on_save_button(self,arg1 ):
 		"""Saves the given Doc
 		"""
+		filePath=self._entry_fileSaveLocation.get_text()
+		if len(filePath)==0:
+			self.show_error_dlg("File path is empty")
+			return
 		treeModel=self._DocTreeView.get_selection().get_selected_rows()[0]
 		path=self._DocTreeView.get_selection().get_selected_rows()[1]
 		#print path[0]
 		iter=treeModel.get_iter(path[0])
 		resourceID= treeModel.get_value(iter,3)
 
-                filePath=self._entry_fileSaveLocation.get_text()
-                print self._entryList[resourceID].title.text
+                
+		
 		self._gdam.download_doc(self._entryList[resourceID],filePath)
 
 	def on_save_n_open_button(self, arg1):
@@ -159,104 +163,54 @@ class ImportGDocsWindow():
 		Arguments:
 		- `arg1`:
 		"""
+		filePath=self._entry_fileSaveLocation.get_text()
+		if len(filePath)==0:
+			self.show_error_dlg("File path is empty")
+			return
 		self.on_save_button(arg1)
 		os.system("soffice "+self._entry_fileSaveLocation.get_text())
 
-
-
-class DocumentsSaveAsWindow():
-	"""Logic for the Save As window for documents
-    """
-	
-	def __init__(self, ):
-		"""
-        """
-
-	#TODO:  Create a good way to get the file locations.From the
-		#ConfigurationManager may be?
-		filename = "/home/ishan/4sep/DocumentSaveDialog.glade"
-		builder = gtk.Builder()
-		builder.add_from_file(filename)
-		builder.connect_signals(self)
-		
-
 	def show_error_dlg(self, error_string):
 		"""This Function is used to show an error dialog when
-	an error occurs.
-	error_string - The error string that will be displayed
-	on the dialog.
-	"""
+		an error occurs.
+		error_string - The error string that will be displayed
+		on the dialog.
+		"""
 		error_dlg = gtk.MessageDialog(type=gtk.MESSAGE_ERROR
 					      , message_format=error_string
 					      , buttons=gtk.BUTTONS_OK)
 		error_dlg.run()
 		error_dlg.destroy()
 
+
+class Test(object):
+	"""
+    """
 	
-
-class MainWindow:
-        """This is an Hello World GTK application"""
-
-        def __init__(self):
-		
-                # #Set the Glade file
-                # self.gladefile = "hello.glade"  
-	        # self.wTree = gtk.glade.XML("1.glade") 
-		
-		# #Get the Main Window, and connect the "destroy" event
-		# self.window = self.wTree.get_widget("MainWindow")
-		# if (self.window):
-		# 	self.window.connect("destroy", gtk.main_quit)
-                #text.insertString( cursor, "in class\n", 0 )
-                #load the 1.glade
-                filename = "/home/ishan/4sep/1.glade"
+	def __init__(self):
+		"""
+        """
+	
+		filename = "/home/ishan/4sep/Test.glade"
 		builder = gtk.Builder()
 		builder.add_from_file(filename)
 		builder.connect_signals(self)
-		#DocList=builder.get_object('DocList')
-		DocList=gtk.ListStore(str)
-		DocTreeView=builder.get_object('DocTreeView')
-		DocTreeView.set_model(DocList)
-		#DocTreeView=gtk.ListStore(str)
-                DocList.append(["TypeHi"])
-		col_type=gtk.TreeViewColumn('Type')
-		col_type.set_resizable(True)
-		DocTreeView.append_column(col_type)
+		#builder.get_object('window1').hide()
 
-                col_name=gtk.TreeViewColumn('Name')
-		col_name.set_resizable(False)
-		DocTreeView.append_column(col_name)
 
-                cell = gtk.CellRendererText()
-		col_type.pack_start(cell,False)
-		col_type.add_attribute(cell,"text",0)
-		
-		#comment the following lines
-		#window=builder.get_object('window')
-		#window.show_all()
-
-	def on_buttonGenerate_clicked(self, widget):
-		print "You clicked the button"
-
+	
 	def destroy_all(self,arg):
 		"""Destroy everything
 		"""
 		gtk.main_quit()
+	
 
-	def on_row_activated(self, treeview,path,column):
-		"""
-		
-                Arguments:
-                - `treeview`:
-                - `path`:
-                - `column`:
-                """
-		print "O.o"
 
 
 
 if __name__ == "__main__":
-	#hwg = MainWindow()
-	guiM=GUIManager()
-	guiM.show_import_window()
-	gtk.main()
+	
+	#guiM=GUIManager()
+	#guiM.show_import_window()
+	t=Test()
+        gtk.main()
