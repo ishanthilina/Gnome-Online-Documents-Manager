@@ -209,6 +209,7 @@
                     <property name="can_focus">True</property>
                     <property name="model">DocList</property>
                     <property name="search_column">2</property>
+                    <signal name="select-cursor-row" handler="on_row_activated" swapped="no"/>
                     <child internal-child="selection">
                       <object class="GtkTreeSelection" id="treeview-selection1"/>
                     </child>
@@ -302,6 +303,7 @@
                 <property name="height_request">31</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="editable">False</property>
                 <property name="invisible_char">●</property>
                 <property name="primary_icon_stock">gtk-directory</property>
                 <signal name="icon-release" handler="on_set_save_location" swapped="no"/>
@@ -325,7 +327,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkHBox" id="box3">
+              <object class="GtkBox" id="box3">
                 <property name="width_request">171</property>
                 <property name="height_request">36</property>
                 <property name="visible">True</property>
@@ -333,18 +335,31 @@
                 <property name="spacing">5</property>
                 <property name="homogeneous">True</property>
                 <child>
-                  <object class="GtkButton" id="but_save">
+                  <object class="GtkButton" id="button1">
                     <property name="label" translatable="yes">Save</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_action_appearance">False</property>
-                    <signal name="released" handler="on_save_button" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="button3">
+                    <property name="label" translatable="yes">Save &amp; Open</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="use_action_appearance">False</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
                 <child>
@@ -363,23 +378,7 @@
                 </child>
               </object>
               <packing>
-                <property name="x">304</property>
-                <property name="y">71</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="button3">
-                <property name="label" translatable="yes">Save &amp; Open</property>
-                <property name="width_request">102</property>
-                <property name="height_request">36</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
-                <signal name="released" handler="on_save_n_open_button" swapped="no"/>
-              </object>
-              <packing>
-                <property name="x">198</property>
+                <property name="x">194</property>
                 <property name="y">71</property>
               </packing>
             </child>

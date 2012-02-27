@@ -1,6 +1,7 @@
 import sys
 import GDocs
 import Configuration
+import os
 try:
  	import pygtk
   	pygtk.require("2.0")
@@ -55,60 +56,62 @@ class ImportGDocsWindow():
 
                 #TODO: Create a good way to get the file locations.From the
 		#ConfigurationManager may be?
-		filename = confMan.get_system_path()+"1.glade"
+		filename = confMan.get_system_path()+"ImportGDocsWindow.glade"
 		builder = gtk.Builder()
 		builder.add_from_file(filename)
 		builder.connect_signals(self)
 		
-		DocTreeView=builder.get_object('DocTreeView')
+		self._DocTreeView=builder.get_object('DocTreeView')
 		self._entry_fileSaveLocation=builder.get_object('fileSaveLocation')
 		
 
                 
 		col_type=gtk.TreeViewColumn('Type')
 		col_type.set_resizable(True)
-		DocTreeView.append_column(col_type)
+		self._DocTreeView.append_column(col_type)
 
                 col_name=gtk.TreeViewColumn('Name',gtk.CellRendererText(),text=1)
 		col_name.set_resizable(True)
-		DocTreeView.append_column(col_name)
+		self._DocTreeView.append_column(col_name)
 
                 col_folders=gtk.TreeViewColumn('In Folders',gtk.CellRendererText(),text=2)
 		col_folders.set_resizable(True)
-		DocTreeView.append_column(col_folders)
+		self._DocTreeView.append_column(col_folders)
 
-                DocList=gtk.ListStore(str,str,str)
-		DocTreeView.set_model(DocList)
+                #The last str is to store the resource_id
+                DocList=gtk.ListStore(str,str,str,str)
+		self._DocTreeView.set_model(DocList)
+
+                ##stores the dictionary of Gdocs sentries
+		self._entryList={}
 		
 		for doc in self._gdam.get_all_documents().entry:
 			data= self._gdam.get_doc_data(doc)
 			#print dir(data)
 			
-			DocList.append([data[0],data[1],"Folder"])
+			DocList.append([data[0],data[1],"Folder",data[2]])
+			#print doc.resource_id
+			self._entryList[doc.resource_id.text]=doc
+			
 
 			#itr=DocList.append([1,'2','3'])
 		#DocList.insert_after(itr,[2,"2",'2'])
-		#DocList.append([2,"ssssss2"])
+		#DocList.append(["1","2","3","R_ID"])
 		
 
                 cell = gtk.CellRendererText()
 		col_type.pack_start(cell,False)
 		col_type.add_attribute(cell,"text",0)
 
+                self._but_save=builder.get_object('but_save')
+		#self._but_save.set_visible(False)
+
 	def destroy_all(self,arg):
 		"""Destroy everything
 		"""
 		gtk.main_quit()
 
-	def on_row_activated(self, treeview,path,column):
-		"""
-		
-                Arguments:
-                - `treeview`:
-                - `path`:
-                - `column`:
-                """
-		print "O.o"
+	
 
 	def on_set_save_location(self,arg1,arg2,arg3):
 		"""
@@ -137,10 +140,27 @@ class ImportGDocsWindow():
 	
 		self._entry_fileSaveLocation.set_text(result)
 
-	def wtf(self,arg ):
+	def on_save_button(self,arg1 ):
+		"""Saves the given Doc
 		"""
+		treeModel=self._DocTreeView.get_selection().get_selected_rows()[0]
+		path=self._DocTreeView.get_selection().get_selected_rows()[1]
+		#print path[0]
+		iter=treeModel.get_iter(path[0])
+		resourceID= treeModel.get_value(iter,3)
+
+                filePath=self._entry_fileSaveLocation.get_text()
+                print self._entryList[resourceID].title.text
+		self._gdam.download_doc(self._entryList[resourceID],filePath)
+
+	def on_save_n_open_button(self, arg1):
+		"""Saves the given doc and opens it in Libre office
+    
+		Arguments:
+		- `arg1`:
 		"""
-		pass
+		self.on_save_button(arg1)
+		os.system("soffice "+self._entry_fileSaveLocation.get_text())
 
 
 

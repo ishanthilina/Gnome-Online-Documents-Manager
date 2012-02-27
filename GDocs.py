@@ -105,7 +105,7 @@ class GDActionsManager():
        
 
 
-    def download_doc(self, entry,path,name):
+    def download_doc(self, entry,path):
         """Downloads a given entry to the path under a given name
         
         Arguments:
@@ -120,17 +120,17 @@ class GDActionsManager():
 
         #deterimine the document type
         #TODO- Edit the logic of the code to allow the user to modify the extension
-        if entry.GetResourceType() == 'document':
+        # if entry.GetResourceType() == 'document':
 
-            doc_type=".odt"
+        #     doc_type=".odt"
 
-        elif entry.GetResourceType() == 'spreadsheet':
-            doc_type=".xls"
+        # elif entry.GetResourceType() == 'spreadsheet':
+        #     doc_type=".pdf"
             
-        full_path=os.path.join(path,name+doc_type)
-        print full_path
+        # full_path=os.path.join(path,name+doc_type)
+        # print full_path
         
-        client.DownloadResource(entry,full_path)
+        client.DownloadResource(entry,path)
 
     def upload_new_doc(self, path,col,doc_title):
         """Uploads a new document to Google Docs
@@ -190,7 +190,7 @@ class GDActionsManager():
         
         # print 'Doc type:', entry.GetResourceType()
         # print 'Doc name: ', entry.title.text
-        # print 'Resource id:', entry.resource_id
+        # print 'Resource id:', entry.resource_id.text
         # print 'Lables :'
         # for label in entry.GetLabels():
         #     print label,
@@ -204,6 +204,6 @@ class GDActionsManager():
         #     for title in  data.GetAttributes(tag='title'):
         #         print title.value
 
-        return [entry.GetResourceType(),entry.title.text]
+        return [entry.GetResourceType(),entry.title.text,entry.resource_id.text]
 
 
