@@ -210,7 +210,7 @@ class Test(object):
 
 if __name__ == "__main__":
 	
-	#guiM=GUIManager()
-	#guiM.show_import_window()
-	t=Test()
+	guiM=GUIManager()
+	guiM.show_import_window()
+	#t=Test()
         gtk.main()

@@ -16,6 +16,7 @@ class GDClientManager():
         """
         """
         self._client = gdata.docs.client.DocsClient(source='yourCo-yourAppName-v1')
+        self._client.ssl=True
         
         #Keep a boolean to verify whether the client has been authenticated or not
         self._is_Authenticated=False
@@ -103,7 +104,21 @@ class GDActionsManager():
 
         return feed
        
+    def get_all_folders(self):
+        """Returns a list of all the folsers in the server
+        """
+        client=self.__create_client()
 
+        feed = client.GetResources(uri=gdata.docs.client.RESOURCE_FEED_URI+'?showfolders=true')
+
+        folders=[]
+        
+        for entry in feed.entry:
+            if entry.GetResourceType()=='folder':
+                folders.append(entry)
+                
+
+        return folders
 
     def download_doc(self, entry,path):
         """Downloads a given entry to the path under a given name
@@ -147,13 +162,21 @@ class GDActionsManager():
 
         client=self.__create_client()
 
-        doc = gdata.docs.data.Resource(type='document', title=doc_title)
+        # doc = gdata.docs.data.Resource(type='document', title=doc_title)
+        # media = gdata.data.MediaSource()
+        # media.SetFileHandle(path, 'application/msword')
+
+
+
+        # doc = client.CreateResource(doc,media=media, collection=col)
+        newResource = gdata.docs.data.Resource(path, "document title")
+
         media = gdata.data.MediaSource()
-        media.SetFileHandle(path, 'application/msword')
+        media.SetFileHandle(path,'application/msword')
 
+        doc = client.CreateResource(newResource, create_uri=gdata.docs.client.RESOURCE_UPLOAD_URI, media=media,collection=col)
 
-
-        doc = client.CreateResource(doc,media=media, collection=col)
+        
         return doc
 
 
