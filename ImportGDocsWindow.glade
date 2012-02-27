@@ -354,6 +354,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_action_appearance">False</property>
+                    <signal name="released" handler="destroy_all" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
