@@ -166,9 +166,14 @@ class GDActionsManager():
         media = gdata.data.MediaSource()
         media.SetFileHandle(path, 'application/msword')
 
+        #If a collection has not been defined
+        
+        if not col:
+            
+            doc = client.CreateResource(doc,media=media)
+            return doc
 
-
-        doc = client.CreateResource(doc,media=media, create_uri=gdata.docs.client.RESOURCE_UPLOAD_URI+'/'+col.resource_id.text+'/contents', collection=col)
+        doc = client.CreateResource(doc,media=media, create_uri=gdata.docs.client.RESOURCE_UPLOAD_URI+'/'+col.resource_id.text+'/contents')
         # newResource = gdata.docs.data.Resource(path, "document title")
 
         # media = gdata.data.MediaSource()

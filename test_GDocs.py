@@ -87,7 +87,8 @@ class GDActionsManagerTester(unittest.TestCase):
 
 
         col=self._gdam.get_all_folders().pop()
-        print col.title.text
+        #col=None
+        # print col.title.text
         
         doc=self._gdam.upload_new_doc('/home/ishan/up.odt',col,"My testing upload")
         self.assertIsInstance(doc,gdata.docs.data.Resource,"Class type does not match.")
