@@ -86,7 +86,8 @@ class GDActionsManagerTester(unittest.TestCase):
         #self._gdcm.set_proxy("http://cache.mrt.ac.lk","3128")
 
 
-        col=self._gdam.create_collection('Testingg')
+        col=self._gdam.get_all_folders().pop()
+        print col.title.text
         
         doc=self._gdam.upload_new_doc('/home/ishan/up.odt',col,"My testing upload")
         self.assertIsInstance(doc,gdata.docs.data.Resource,"Class type does not match.")
@@ -98,8 +99,8 @@ class GDActionsManagerTester(unittest.TestCase):
 
         self._gdcm.authenticate_client(account)
 
-        for folder in self._gdam.get_all_folders():
-            print folder.title.text
+        # for folder in self._gdam.get_all_folders():
+        #     print folder.title.text
         
 #test suite
 suite1 = unittest.TestLoader().loadTestsFromTestCase(GDClientManagerTester)

@@ -162,19 +162,19 @@ class GDActionsManager():
 
         client=self.__create_client()
 
-        # doc = gdata.docs.data.Resource(type='document', title=doc_title)
-        # media = gdata.data.MediaSource()
-        # media.SetFileHandle(path, 'application/msword')
-
-
-
-        # doc = client.CreateResource(doc,media=media, collection=col)
-        newResource = gdata.docs.data.Resource(path, "document title")
-
+        doc = gdata.docs.data.Resource(type='document', title=doc_title)
         media = gdata.data.MediaSource()
-        media.SetFileHandle(path,'application/msword')
+        media.SetFileHandle(path, 'application/msword')
 
-        doc = client.CreateResource(newResource, create_uri=gdata.docs.client.RESOURCE_UPLOAD_URI, media=media,collection=col)
+
+
+        doc = client.CreateResource(doc,media=media, create_uri=gdata.docs.client.RESOURCE_UPLOAD_URI+'/'+col.resource_id.text+'/contents', collection=col)
+        # newResource = gdata.docs.data.Resource(path, "document title")
+
+        # media = gdata.data.MediaSource()
+        # media.SetFileHandle(path,'application/msword')
+
+        # doc = client.CreateResource(newResource, create_uri=gdata.docs.client.RESOURCE_UPLOAD_URI, media=media,collection=col)
 
         
         return doc
