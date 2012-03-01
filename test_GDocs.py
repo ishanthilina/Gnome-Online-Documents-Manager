@@ -86,12 +86,15 @@ class GDActionsManagerTester(unittest.TestCase):
         #self._gdcm.set_proxy("http://cache.mrt.ac.lk","3128")
 
 
-        col=self._gdam.get_all_folders().pop()
-        #col=None
+        #col=self._gdam.get_all_folders().pop()
+        col=None
         # print col.title.text
-        
+
+        print 'Uploading doc'
         doc=self._gdam.upload_new_doc('/home/ishan/up.odt',col,"My testing upload")
-        self.assertIsInstance(doc,gdata.docs.data.Resource,"Class type does not match.")
+        print 'updating doc'
+        self._gdam.update_doc(doc,'/home/ishan/ddd.odt')
+        #self.assertIsInstance(doc,gdata.docs.data.Resource,"Class type does not match.")
 
     def test_get_all_folders(self):
         """Tests the get_all_folders() method

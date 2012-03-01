@@ -195,7 +195,22 @@ class GDActionsManager():
         col = gdata.docs.data.Resource(type='folder', title=name)
         col= client.CreateResource(col)
         return col
-        
+
+    def update_doc(self, entry,path):
+        """Updates a document in the server
+    
+        Arguments:
+        - `entry`:
+        - `path`: String- path to the document
+        """
+        client=self.__create_client()
+        media = gdata.data.MediaSource()
+        media.SetFileHandle(path, 'application/msword')
+
+        print entry.resource_id.text
+        #doc=client.UpdateResource(entry)
+        doc=client.UpdateResource(entry,media=media,update_metadata=False,new_revision=True,force=True)
+        return doc
 
     def _get_doc_type(self,entry):
         """Returns the type of the document

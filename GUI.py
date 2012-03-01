@@ -34,9 +34,46 @@ class GUIManager():
 
                 window=ImportGDocsWindow(self._gdam,self._confMan)
 		#window=MainWindow()
+
+	def show_export_window(self, ):
+		"""Shows the export Documents window
+		"""
+		window=ExportGDocsWindow(self._gdam,self._confMan)
 		
 
+class ExportGDocsWindow():
+	"""Shows the export  Google Docs windows
+	"""
 	
+	def __init__(self, gdam,confMan):
+		"""
+		
+                Arguments:
+                - `gdam`:GDocs.GDActionsManager
+		- `confMan`:Configuration.ConfigurationManager
+                """
+		self._gdam = gdam
+
+                #load and setup the GUI components
+
+               
+		filename = confMan.get_system_path()+"ExportGDocsWindow.glade"
+		builder = gtk.Builder()
+		builder.add_from_file(filename)
+		builder.connect_signals(self)
+		
+		self._FolderTreeView=builder.get_object('FolderTreeView')
+
+		col_type=gtk.TreeViewColumn('Name')
+		col_type.set_resizable(True)
+		self._FolderTreeView.append_column(col_type)
+
+                col_name=gtk.TreeViewColumn('Add?',gtk.CellRendererText(),active=1)
+		col_name.set_resizable(True)
+		self._FolderTreeView.append_column(col_name)
+
+		
+		
 
 
 class ImportGDocsWindow():
