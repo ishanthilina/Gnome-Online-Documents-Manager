@@ -2,6 +2,7 @@ import sys
 import GDocs
 import Configuration
 import os
+import gobject
 try:
  	import pygtk
   	pygtk.require("2.0")
@@ -68,12 +69,40 @@ class ExportGDocsWindow():
 		col_type.set_resizable(True)
 		self._FolderTreeView.append_column(col_type)
 
-                col_name=gtk.TreeViewColumn('Add?',gtk.CellRendererText(),active=1)
+                FolderList=gtk.TreeStore( gobject.TYPE_STRING,
+                                         gobject.TYPE_BOOLEAN )
+
+                renderer=gtk.CellRendererToggle()
+		renderer.set_property('activatable', True)
+		renderer.connect( 'toggled', self.col1_toggled_cb, FolderList )
+		#renderer.set_sensitive(True)
+
+                col_name=gtk.TreeViewColumn('Add',renderer)
+		col_name.add_attribute(renderer, "active", 1)
+	
 		col_name.set_resizable(True)
 		self._FolderTreeView.append_column(col_name)
 
 		
+		#	FolderList=gtk.ListStore(gobject.TYPE_STRING,gobject.TYPE_BOOLEAN)
 		
+		#	FolderList=gtk.ListStore(str)
+		self._FolderTreeView.set_model(FolderList)
+
+                FolderList.append(None, ('ss',None))
+
+                cell = gtk.CellRendererText()
+		cell.set_property( 'editable', True )
+		col_type.pack_start(cell,False)
+		col_type.add_attribute(cell,"text",0)
+
+	def col1_toggled_cb( self, cell, path, model ):
+		"""
+		Sets the toggled state on the toggle button to true or false.
+		"""
+		model[path][1] = not model[path][1]
+		print "Toggle '%s' to: %s" % (model[path][0], model[path][1],)
+		return
 
 
 class ImportGDocsWindow():
@@ -128,6 +157,8 @@ class ImportGDocsWindow():
 			
 			DocList.append([data[0],data[1],"Folder",data[2]])
 			#print doc.resource_id
+			#TODO: There's a more elegant way to do this
+			#http://faq.pygtk.org/index.py?req=show&file=faq13.015.htp
 			self._entryList[doc.resource_id.text]=doc
 			
 
@@ -248,6 +279,6 @@ class Test(object):
 if __name__ == "__main__":
 	
 	guiM=GUIManager()
-	guiM.show_import_window()
+	guiM.show_export_window()
 	#t=Test()
         gtk.main()
