@@ -65,46 +65,71 @@ class ExportGDocsWindow():
 		
 		self._FolderTreeView=builder.get_object('FolderTreeView')
 
-		col_type=gtk.TreeViewColumn('Name')
-		col_type.set_resizable(True)
-		self._FolderTreeView.append_column(col_type)
-
-                FolderList=gtk.TreeStore( gobject.TYPE_STRING,
-                                         gobject.TYPE_BOOLEAN )
-
-                renderer=gtk.CellRendererToggle()
-		renderer.set_property('activatable', True)
-		renderer.connect( 'toggled', self.col1_toggled_cb, FolderList )
-		#renderer.set_sensitive(True)
-
-                col_name=gtk.TreeViewColumn('Add',renderer)
-		col_name.add_attribute(renderer, "active", 1)
-	
+		col_name=gtk.TreeViewColumn('')
 		col_name.set_resizable(True)
 		self._FolderTreeView.append_column(col_name)
 
-		
-		#	FolderList=gtk.ListStore(gobject.TYPE_STRING,gobject.TYPE_BOOLEAN)
-		
-		#	FolderList=gtk.ListStore(str)
-		self._FolderTreeView.set_model(FolderList)
+                self._folderList=gtk.TreeStore( gobject.TYPE_STRING,
+                                         gobject.TYPE_BOOLEAN,gobject.TYPE_PYOBJECT )
 
-                FolderList.append(None, ('ss',None))
+                renderer=gtk.CellRendererToggle()
+		renderer.set_property('activatable', True)
+		renderer.connect( 'toggled', self.col1_toggled_cb, self._folderList )
+		#renderer.set_sensitive(True)
+
+                col_select=gtk.TreeViewColumn('Folder Name',renderer)
+		col_select.add_attribute(renderer, "active", 1)
+	
+		col_select.set_resizable(True)
+		self._FolderTreeView.append_column(col_select)
+
+		
+	
+		self._FolderTreeView.set_model(self._folderList)
+
+                #add folder data
+		folders=self._gdam.get_folder_hierarchy()
+
+                for folder in folders:
+			self._folderList.append(None,(folder.title.text,None,folder))
+
+			#p= FolderList.append(None, ('1',None))
+			#	FolderList.append(p, ('2',None))
 
                 cell = gtk.CellRendererText()
 		cell.set_property( 'editable', True )
-		col_type.pack_start(cell,False)
-		col_type.add_attribute(cell,"text",0)
+		col_select.pack_start(cell,False)
+		col_select.add_attribute(cell,"text",0)
 
 	def col1_toggled_cb( self, cell, path, model ):
 		"""
 		Sets the toggled state on the toggle button to true or false.
 		"""
+		
+
+               
+		
 		model[path][1] = not model[path][1]
-		print "Toggle '%s' to: %s" % (model[path][0], model[path][1],)
+		
+
+                
+		
 		return
+	
+	def get_selected_folders(self):
+		"""Returns the selected folders as a list
+		"""
+		selected=[]
 
+                for folder in self._folderList:
+		
+			if  folder[1]:
+				selected.append(folder[2])
+			
 
+		print selected
+
+		
 class ImportGDocsWindow():
 	"""Shows the import Google Docs windows
 	"""

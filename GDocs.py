@@ -120,6 +120,51 @@ class GDActionsManager():
 
         return folders
 
+    def get_sub_folders(self, entry):
+        """Returns all the sub Folders
+    
+        Arguments:
+        - `entry`:gdata.docs.data.Resource (folder)
+        """
+        
+        client=self.__create_client()
+       
+        subFolders=client.GetResources('https://docs.google.com/feeds/default/private/full'+'/'+entry.resource_id.text+'/contents/-/folder')
+
+        return subFolders
+
+    #TODO: Implement the functionality correctly
+    def get_folder_hierarchy(self):
+        """Returns the folder hierarchy in Google Docs
+        """
+        client=self.__create_client()
+        
+        #Get the folders in root
+        rootFolders=client.GetResources('https://docs.google.com/feeds/default/private/full/folder%3Aroot/contents/-/folder')
+
+        #store all the folders to iterate
+        folders=[]
+        #to store the folder structure
+        folStruct=[]
+        #print rootFolders
+        ##What happens if there are no sub folders...?
+        for folder in rootFolders.entry:
+            # print self.get_doc_data(folder)
+            folders.append(folder)
+
+        #iterate through all the folders
+        #for folder in folders:
+            #subFolders=self.get_sub_folders(folder)
+            #   print folder.title.text
+
+            #add the sub folders to the list
+            #            for subF in subFolders.entry:
+            #   print subF.title.text
+        
+        return folders
+        
+        
+
     def download_doc(self, entry,path):
         """Downloads a given entry to the path under a given name
         
@@ -207,7 +252,7 @@ class GDActionsManager():
         media = gdata.data.MediaSource()
         media.SetFileHandle(path, 'application/msword')
 
-        print entry.resource_id.text
+        # print entry.resource_id.text
         #doc=client.UpdateResource(entry)
         doc=client.UpdateResource(entry,media=media,update_metadata=False,new_revision=True,force=True)
         return doc
@@ -230,22 +275,23 @@ class GDActionsManager():
         
         """
         
-        
-        # print 'Doc type:', entry.GetResourceType()
-        # print 'Doc name: ', entry.title.text
-        # print 'Resource id:', entry.resource_id.text
-        # print 'Lables :'
-        # for label in entry.GetLabels():
-        #     print label,
+        print '\n'
+        print '=================================================='
+        print 'Doc type:', entry.GetResourceType()
+        print 'Doc name: ', entry.title.text
+        print 'Resource id:', entry.resource_id.text
+        print 'Lables :'
+        for label in entry.GetLabels():
+            print label,
 
-        # print
+        print
 
-        # print
-        # print 'Collections (Folders): '
+        print
+        print 'Collections (Folders): '
 
-        # for data in entry.InCollections():
-        #     for title in  data.GetAttributes(tag='title'):
-        #         print title.value
+        for data in entry.InCollections():
+            for title in  data.GetAttributes(tag='title'):
+                print title.value
 
         return [entry.GetResourceType(),entry.title.text,entry.resource_id.text]
 
