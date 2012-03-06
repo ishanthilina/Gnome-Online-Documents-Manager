@@ -5,7 +5,6 @@
   <object class="GtkWindow" id="window1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <signal name="destroy" handler="destroy_all" swapped="no"/>
     <child>
       <object class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
@@ -23,9 +22,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="model">liststore1</property>
-                <child internal-child="selection">
-                  <object class="GtkTreeSelection" id="treeview-selection1"/>
-                </child>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -64,21 +60,19 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkHButtonBox" id="buttonbox1">
+                  <object class="GtkButtonBox" id="buttonbox1">
                     <property name="width_request">170</property>
                     <property name="height_request">80</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="spacing">56</property>
                     <property name="layout_style">start</property>
                     <child>
                       <object class="GtkButton" id="button1">
-                        <property name="label" translatable="yes">Upload</property>
+                        <property name="label" translatable="yes">button</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_action_appearance">False</property>
-                        <signal name="released" handler="upload" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -88,7 +82,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="button2">
-                        <property name="label" translatable="yes">Cancel</property>
+                        <property name="label" translatable="yes">button</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>

@@ -36,7 +36,7 @@ class GUIManager():
                 window=ImportGDocsWindow(self._gdam,self._confMan)
 		#window=MainWindow()
 
-	def show_export_window(self, ):
+	def show_export_window(self):
 		"""Shows the export Documents window
 		"""
 		window=ExportGDocsWindow(self._gdam,self._confMan)
@@ -54,6 +54,7 @@ class ExportGDocsWindow():
 		- `confMan`:Configuration.ConfigurationManager
                 """
 		self._gdam = gdam
+		self._confMan=confMan
 
                 #load and setup the GUI components
 
@@ -101,19 +102,22 @@ class ExportGDocsWindow():
 		col_select.pack_start(cell,False)
 		col_select.add_attribute(cell,"text",0)
 
+	def upload(self):
+		"""Upload a doc to Google docs upon GUI call
+		"""
+		#TODO: Add multi folder support
+		folders=self.get_selected_folders()
+		
+		
+                
 	def col1_toggled_cb( self, cell, path, model ):
 		"""
 		Sets the toggled state on the toggle button to true or false.
 		"""
 		
 
-               
-		
 		model[path][1] = not model[path][1]
-		
 
-                
-		
 		return
 	
 	def get_selected_folders(self):
@@ -127,7 +131,7 @@ class ExportGDocsWindow():
 				selected.append(folder[2])
 			
 
-		print selected
+		return selected
 
 		
 class ImportGDocsWindow():
@@ -262,6 +266,7 @@ class ImportGDocsWindow():
 			return
 		self.on_save_button(arg1)
 		os.system("soffice "+self._entry_fileSaveLocation.get_text())
+		self.destroy_all(None)
 
 	def show_error_dlg(self, error_string):
 		"""This Function is used to show an error dialog when
@@ -302,8 +307,17 @@ class Test(object):
 
 
 if __name__ == "__main__":
+
+        guiM=GUIManager()
 	
-	guiM=GUIManager()
-	guiM.show_export_window()
+	if (len(sys.argv) > 1):
+		if( sys.argv[1] == 'import' ):
+		
+	        	guiM.show_import_window()
+		
+		elif( sys.argv[1] == 'export' ):
+	        	guiM.show_export_window()
+	
+	#
 	#t=Test()
-        gtk.main()
+	gtk.main()
