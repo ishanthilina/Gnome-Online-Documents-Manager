@@ -322,6 +322,8 @@ if __name__ == "__main__":
 	        	guiM.show_import_window()
 		
 		elif( sys.argv[1] == 'export' ):
+
+		        print 'save'
 	        	guiM.show_export_window()
 	
 	#
