@@ -10,6 +10,7 @@ class ConfigurationManager():
         """
         """
         self._am=Authentication.AccountManager()
+        self._cp=ConfigParser()
         
 
     def get_account(self):
@@ -43,10 +44,10 @@ class ConfigurationManager():
         Array[0]=http proxy settings
         Array[1]=https proxy settings
         """
-        cp=ConfigParser()
-        cp.read('settings.cfg')
-        http_proxy=cp.get("proxy_data","http")
-        https_proxy=cp.get("proxy_data","https")
+        self._cp=ConfigParser()
+        self._cp.read('settings.cfg')
+        http_proxy=self._cp.get("proxy_data","http")
+        https_proxy=self._cp.get("proxy_data","https")
 
         return [http_proxy,https_proxy]
 
@@ -60,14 +61,12 @@ class ConfigurationManager():
         - `https_port`:
         """
 
-        #setup the data to be written
-        cp = ConfigParser()
-        
-        cp.add_section('proxy_data')
-        cp.set('proxy_data','http',http_url+':'+http_port)
-        cp.set('proxy_data','https',https_url+':'+https_port)
+       
+        self._cp.add_section('proxy_data')
+        self._cp.set('proxy_data','http',http_url+':'+http_port)
+        self._cp.set('proxy_data','https',https_url+':'+https_port)
                 
         # Writing our configuration file
         with open('settings.cfg', 'wb') as configfile:
-            cp.write(configfile)
+            self._cp.write(configfile)
         
