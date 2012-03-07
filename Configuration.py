@@ -71,12 +71,17 @@ class ConfigurationManager():
             #if the system uses a direct connection
             else:
                 return [None,None]
-            
         
-        http_proxy=self._scp.get("proxy_data","http")
-        https_proxy=self._scp.get("proxy_data","https")
+        elif get_proxy_from=='file':
+             http_proxy=self._scp.get("proxy_data","http")
+             https_proxy=self._scp.get("proxy_data","https")
+             return [http_proxy,https_proxy]
 
-        return [http_proxy,https_proxy]
+        #If no proxy is used 
+        return [None,None]
+       
+
+        
 
     def __get_sytem_proxy_settings(self):
         """Get system proxy settings."""
