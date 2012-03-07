@@ -16,7 +16,7 @@ class AccountTestCase(unittest.TestCase):
         """
         import Authentication
         #setup a dummy account
-        self._account=Authentication.Account("Key","Secret","Acc_tok","Acc_tok_sec")
+        self._account=Authentication.Account("Key","Secret","Acc_tok","Acc_tok_sec","email")
         
     
     def test_get_consumer_key(self):
@@ -42,6 +42,11 @@ class AccountTestCase(unittest.TestCase):
         """Tests the get_access_token_secret() method
         """
         self.assertEqual("Acc_tok_sec",self._account.get_access_token_secret(),"Access token secrets don't match")
+
+    def test_get_email(self):
+        """Tests the get_email() method
+        """
+        self.assertEqual("email",self._account.get_email(),"Email does not match")
 
 
 class AccountManagerTestCase(unittest.TestCase):

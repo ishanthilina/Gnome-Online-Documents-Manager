@@ -13,7 +13,7 @@ class Account():
     """A class to store account details
     """
     
-    def __init__(self, consumer_key, consumer_secret, access_token,access_token_secret):
+    def __init__(self, consumer_key, consumer_secret, access_token,access_token_secret,email):
         """
         
         Arguments:
@@ -21,11 +21,13 @@ class Account():
         - `consumer_secret`:String
         - `access_token`:String
         - `access_token_secret`:String
+        - `email`:String
         """
         self._consumer_key = consumer_key
         self._consumer_secret = consumer_secret
         self._access_token = access_token
         self._access_token_secret = access_token_secret
+        self._email=email
         
 
     def get_consumer_key(self ):
@@ -48,6 +50,11 @@ class Account():
         """returns the access token secret of the account
         """ 
         return self._access_token_secret
+
+    def get_email(self):
+        """Returns the email of the account
+        """
+        return self._email
         
 
 class AccountManager(unohelper.Base):
@@ -78,6 +85,7 @@ class AccountManager(unohelper.Base):
             test=re.search("/org/gnome/OnlineAccounts/Accounts", entry)
             if test:
                 #get the OAuth details
+                email= objects[entry]['org.gnome.OnlineAccounts.Account']['Identity'].encode('utf8')
                 consumer_key=objects[entry]['org.gnome.OnlineAccounts.OAuthBased']['ConsumerKey'].encode('utf8')
                 consumer_secret=objects[entry]['org.gnome.OnlineAccounts.OAuthBased']['ConsumerSecret'].encode('utf8')
 
@@ -87,7 +95,7 @@ class AccountManager(unohelper.Base):
                 access_token_secret=oauth_iface.GetAccessToken()[1].encode('utf8')
 
                 #Create an account
-                cl=Account(consumer_key,consumer_secret , access_token, access_token_secret )
+                cl=Account(consumer_key,consumer_secret , access_token, access_token_secret,email )
                 accounts_arr.append(cl)
 
  
