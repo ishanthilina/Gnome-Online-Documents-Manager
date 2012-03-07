@@ -52,17 +52,7 @@ class GDClientManager():
         else:
             raise MyExceptions.CustomException("Client not Authenticated")
 
-    def set_proxy(self, url,port):
-        """
-        Sets proxy for the environment of the script
-        
-        Arguments:
-        - `url`:URL of the proxy server
-        - `port`:port of the proxy server
-        """
-        
-        os.environ['http_proxy']=url+":"+port
-        os.environ['https_proxy']=url+":"+port
+    
 
 class GDActionsManager():
     """Controls the interaction with the Google Docs service

@@ -133,6 +133,11 @@ class ExportGDocsWindow():
 
 		return selected
 
+	def destroy_all(self,arg):
+		"""Destroy everything
+		"""
+		gtk.main_quit()
+
 		
 class ImportGDocsWindow():
 	"""Shows the import Google Docs windows
