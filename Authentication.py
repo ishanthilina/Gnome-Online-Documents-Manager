@@ -71,8 +71,8 @@ class AccountManager(unohelper.Base):
         """Returns the available accounts in Gnome Online Accounts manager
         """
 
-        #To store the accounts
-        accounts_arr=[]
+        #dictionary to store the accounts
+        accounts_dic={}
         
         #get the accounts interaface from DBus
         iface=DBusConnector.DBusConnector().get_dbus_iface()
@@ -96,10 +96,10 @@ class AccountManager(unohelper.Base):
 
                 #Create an account
                 cl=Account(consumer_key,consumer_secret , access_token, access_token_secret,email )
-                accounts_arr.append(cl)
+                accounts_dic[email]=cl
 
  
-        return accounts_arr
+        return accounts_dic
 
 
         

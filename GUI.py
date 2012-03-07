@@ -92,8 +92,9 @@ class ExportGDocsWindow():
 		folders=self._gdam.get_folder_hierarchy()
 
                 for folder in folders:
+			print folder.title.text
 			self._folderList.append(None,(folder.title.text,None,folder))
-
+			
 			#p= FolderList.append(None, ('1',None))
 			#	FolderList.append(p, ('2',None))
 

@@ -15,7 +15,7 @@ class ConfigurationManager():
         
         self._scp=ConfigParser.SafeConfigParser()
 
-       
+        #config file to read
         self._scp.read('settings.cfg')
         
 
@@ -25,7 +25,13 @@ class ConfigurationManager():
         #TODO: Properly implement the functionality to get the 
         #account from a persistence location
 
-        account=self._am.get_accounts().pop()
+        #check whether the user has selected a default account
+        if self._scp.get('acc_info','has_default')=="True":
+            accountName=self._scp.get('acc_info','account')
+
+            return self._am.get_accounts()[accountName]
+        
+        
         return account
 
     def get_system_path(self):

@@ -1,8 +1,11 @@
 [proxy_data]
-get_from= 
+get_from = system
 http = 1:2
 https = 3:4
 
 [file_path]
 path = 4sep
 
+[acc_info]
+has_default=True
+account=ishanthilina@gmail.com

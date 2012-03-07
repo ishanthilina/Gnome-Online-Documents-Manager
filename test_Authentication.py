@@ -62,9 +62,9 @@ class AccountManagerTestCase(unittest.TestCase):
     def test_get_accounts(self):
         """Tests the get_accounts() method
         """
+       
         
-        
-        self.assertIsInstance(self._am.get_accounts(),list,"Not an array of Account classes")
+        self.assertIsInstance(self._am.get_accounts(),dict,"Not an array of Account classes")
         
         
         
