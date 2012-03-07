@@ -1,6 +1,6 @@
 import Authentication
 import os
-from ConfigParser import *
+import ConfigParser
 
 class ConfigurationManager():
     """Provides an interface to access and configure the extension settings
@@ -10,7 +10,11 @@ class ConfigurationManager():
         """
         """
         self._am=Authentication.AccountManager()
-        self._cp=ConfigParser()
+        
+        self._scp=ConfigParser.SafeConfigParser()
+
+       
+        self._scp.read('settings.cfg')
         
 
     def get_account(self):
@@ -22,10 +26,11 @@ class ConfigurationManager():
         account=self._am.get_accounts().pop()
         return account
 
-    def get_system_path(self, ):
+    def get_system_path(self):
         """Returns the path of the place where the python scripts are
         """
-        return os.path.expanduser('~')+'/4sep/'
+        
+        return os.path.expanduser('~')+"/"+self._scp.get("file_path","path")
 
     def set_proxy(self, url,port):
         """
@@ -44,10 +49,10 @@ class ConfigurationManager():
         Array[0]=http proxy settings
         Array[1]=https proxy settings
         """
-        self._cp=ConfigParser()
-        self._cp.read('settings.cfg')
-        http_proxy=self._cp.get("proxy_data","http")
-        https_proxy=self._cp.get("proxy_data","https")
+        
+        
+        http_proxy=self._scp.get("proxy_data","http")
+        https_proxy=self._scp.get("proxy_data","https")
 
         return [http_proxy,https_proxy]
 
@@ -62,11 +67,11 @@ class ConfigurationManager():
         """
 
        
-        self._cp.add_section('proxy_data')
-        self._cp.set('proxy_data','http',http_url+':'+http_port)
-        self._cp.set('proxy_data','https',https_url+':'+https_port)
+        #self._cp.add_section('proxy_data')
+        self._scp.set('proxy_data','http',http_url+':'+http_port)
+        self._scp.set('proxy_data','https',https_url+':'+https_port)
                 
         # Writing our configuration file
         with open('settings.cfg', 'wb') as configfile:
-            self._cp.write(configfile)
+            self._scp.write(configfile)
         

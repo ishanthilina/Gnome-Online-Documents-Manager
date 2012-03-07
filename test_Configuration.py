@@ -26,6 +26,10 @@ class ConfigurationManagerTestCase(unittest.TestCase):
 	self.confMan.persist_proxy('1','2','3','4')
 	self.assertEqual(['1:2','3:4'],self.confMan.get_proxy(),'Proxy values does not match')
 
+    def test_get_system_path(self):
+	"""Tests the get_system_path() method
+	"""
+	print self.confMan.get_system_path()
     
         
 

@@ -1,4 +1,7 @@
 [proxy_data]
-http_proxy = 1:2
-https_proxy = 3:4
+http = 1:2
+https = 3:4
+
+[file_path]
+path = gg
 
