@@ -1,0 +1,4 @@
+[proxy_data]
+http_proxy = 1:2
+https_proxy = 3:4
+

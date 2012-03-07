@@ -1,5 +1,6 @@
 import Authentication
 import os
+from ConfigParser import *
 
 class ConfigurationManager():
     """Provides an interface to access and configure the extension settings
@@ -36,3 +37,37 @@ class ConfigurationManager():
         
         os.environ['http_proxy']=url+":"+port
         os.environ['https_proxy']=url+":"+port
+
+    def get_proxy(self, ):
+        """Returns the proxy settings as an array 
+        Array[0]=http proxy settings
+        Array[1]=https proxy settings
+        """
+        cp=ConfigParser()
+        cp.read('settings.cfg')
+        http_proxy=cp.get("proxy_data","http")
+        https_proxy=cp.get("proxy_data","https")
+
+        return [http_proxy,https_proxy]
+
+    def persist_proxy(self, http_url,http_port,https_url,https_port):
+        """
+        
+        Arguments:
+        - `http_url`:
+        - `http_port`:
+        - `https_url`:
+        - `https_port`:
+        """
+
+        #setup the data to be written
+        cp = ConfigParser()
+        
+        cp.add_section('proxy_data')
+        cp.set('proxy_data','http',http_url+':'+http_port)
+        cp.set('proxy_data','https',https_url+':'+https_port)
+                
+        # Writing our configuration file
+        with open('settings.cfg', 'wb') as configfile:
+            cp.write(configfile)
+        
