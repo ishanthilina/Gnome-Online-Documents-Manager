@@ -166,6 +166,9 @@ class ConfigurationManager():
         - `https_port`:
         """
 
+        ##TODO: Add code to remove extra http or https text
+        ##ex:
+        ##http://http://www.cache.mrt.ac.lk
        
         #self._cp.add_section('proxy_data')
         self._scp.set('proxy_data','http',http_url+':'+http_port)

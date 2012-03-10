@@ -76,12 +76,22 @@ class SettingsWindow():
 		builder = gtk.Builder()
 		builder.add_from_file(filename)
 		builder.connect_signals(self)
-		
+
+                #widgets for accounts settings
 		self._accountsList=builder.get_object('Combo_AccountsList')
 		self._rbFromPersist=builder.get_object('rbFromPersist')
 		self._rbFromList=builder.get_object('rbFromList')
 		self._cbRememberAcc=builder.get_object('cbRememberAcc')
 		self._accLabel=builder.get_object('accLabel')
+
+                #widgets for proxy Settings
+		self._tbHttp=builder.get_object('tbHttp')
+		self._tbHttps=builder.get_object('tbHttps')
+		self._rbNoProxy=builder.get_object('rbNoProxy')
+		self._rbSysProxy=builder.get_object('rbSysProxy')
+		self._rbCustProxy=builder.get_object('rbCustProxy')
+		self._tbHttpPort=builder.get_object('tbHttpPort')
+		self._tbHttpsPort=builder.get_object('tbHttpsPort')
 
                 #Set text for the current selected default account
                 if self._confMan.get_persisted_account():
@@ -149,12 +159,36 @@ class SettingsWindow():
 				self._confMan.set_persisted_account(account)
 				self._confMan.set_persist_active()
 			
-                        #self._accountsList.get_active()
+                       
                 
 
                 ##Handle proxy settings
 
+	def disable_custom_proxy(self, args):
+		"""Disables the custom proxy related widgets
+    
+    Arguments:
+    - `args`:
+    """
+		self._tbHttp.set_sensitive(False)
+		self._tbHttps.set_sensitive(False)
+		self._tbHttpPort.set_sensitive(False)
+		self._tbHttpsPort.set_sensitive(False)
 
+
+	def enable_custom_proxy(self, args):
+		"""Disables the custom proxy related widgets
+    
+    Arguments:
+    - `args`:
+    """
+		self._tbHttp.set_sensitive(True)
+		self._tbHttps.set_sensitive(True)
+		self._tbHttpPort.set_sensitive(True)
+		self._tbHttpsPort.set_sensitive(True)
+
+
+                
 
 	def destroy_all(self,arg):
 		"""Destroy everything
