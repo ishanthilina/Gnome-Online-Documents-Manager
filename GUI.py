@@ -46,7 +46,7 @@ class GUIManager():
 	def show_settings_window(self):
 		"""Shows the settings window
 		"""
-		window=SettingsWindow(self._confMan,self._accMan)
+		window=SettingsWindow(self._confMan,self._accMan,self._gdcm)
 
 
 
@@ -54,17 +54,19 @@ class SettingsWindow():
 	"""Shows the Settings  window for the system
 	"""
 	
-	def __init__(self,confMan,accMan):
+	def __init__(self,confMan,accMan,gdcm):
 		"""
 		
                 Arguments:
                 - `gdam`:GDocs.GDActionsManager
 		- `confMan`:Configuration.ConfigurationManager
 		-`accMan`:Authentication.AccountManager
+		-`gdcm`:GDocs.GDClientManager
                 """
 		#self._gdam = gdam
 		self._confMan=confMan
 		self._accMan=accMan
+		self._gdcm=gdcm
 		
 
                 #load and setup the GUI components
@@ -82,7 +84,7 @@ class SettingsWindow():
 		self._accLabel=builder.get_object('accLabel')
 
                 #Set text for the current selected default account
-                if self._confMan.get_account():
+                if self._confMan.get_persisted_account():
 			self._accLabel.set_text(self._confMan.get_account().get_email())
 		else:
 			self._accLabel.set_text('None')
@@ -129,8 +131,25 @@ class SettingsWindow():
 		"""
 		##Handle Account settings first
 
-                
-                
+                ##if account needs to be loaded from persistence
+		if self._rbFromPersist.get_active():
+			account=self._confMan.get_persisted_account()
+			self._confMan.set_account(account)
+			self._gdcm.authenticate_client(account)
+
+			#else take it from the list
+                elif self._rbFromList.get_active():
+			
+			account=self._accountsList.get_model()[self._accountsList.get_active()][1]
+			self._confMan.set_account(account)
+			self._gdcm.authenticate_client(account)
+
+                        #if the settings needs to be persisted
+			if self._cbRememberAcc.get_active():
+				self._confMan.set_persisted_account(account)
+				self._confMan.set_persist_active()
+			
+                        #self._accountsList.get_active()
                 
 
                 ##Handle proxy settings

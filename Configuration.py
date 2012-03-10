@@ -9,19 +9,34 @@ class ConfigurationManager():
     def __init__(self):
         """
         """
+
+        #TODO: Currently in this class the way to persist acounts and
+        #the way to handle their usage status is very primitive. Need
+        #to improve this.
+        #ex:
+        #Bad method- set_persist_active()
+        
         self._am=Authentication.AccountManager()
         
         self._scp=ConfigParser.SafeConfigParser()
 
        #config file to read
         self._scp.read('settings.cfg')
+
+        #Currently set account
+        self._account=None
+
+        if self._scp.get('acc_info','has_default')=="True":
+            accountName=self._scp.get('acc_info','account')
+
+            self._account=self._am.get_accounts()[accountName]
+        
         
 
-    def get_account(self):
-        """Returns the current selected account
+    def get_persisted_account(self):
+        """Returns the current persisted selected account
         """
-        #TODO: Properly implement the functionality to get the 
-        #account from a persistence location
+       
 
         #check whether the user has selected a default account
         if self._scp.get('acc_info','has_default')=="True":
@@ -31,6 +46,45 @@ class ConfigurationManager():
         
         
         return None
+
+    def set_persisted_account(self, account):
+        """Sets the persisted account
+        
+        Arguments:
+        - `account`:Authentication.Account
+        """
+        
+        self._scp.set('acc_info','account',account.get_email())
+        
+                
+        # Writing our configuration file
+        with open('settings.cfg', 'wb') as configfile:
+            self._scp.write(configfile)
+
+    def set_persist_active(self):
+        """Mark the persisted account as active
+        """
+        self._scp.set('acc_info','has_default','True')
+        
+                
+        # Writing our configuration file
+        with open('settings.cfg', 'wb') as configfile:
+            self._scp.write(configfile)
+
+    def get_account(self):
+        """Returns the current selected account
+        """
+        
+        return self._account
+
+    def set_account(self, account):
+        """Sets the current Account
+        
+        Arguments:
+        - `account`:Authentication.Account
+        """
+        self._account=account
+        
 
     def get_system_path(self):
         """Returns the path of the place where the python scripts are

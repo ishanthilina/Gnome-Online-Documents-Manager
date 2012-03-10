@@ -20,6 +20,7 @@ class GDClientManagerTester(unittest.TestCase):
         import Authentication
         import GDocs
         import gdata.docs.client
+        import Configuration
         
 
        
@@ -29,6 +30,7 @@ class GDClientManagerTester(unittest.TestCase):
         self._am=Authentication.AccountManager()
 
         self._gdcm=GDocs.GDClientManager()
+        self._confMan=Configuration.ConfigurationManager()
     
         
         
@@ -40,7 +42,8 @@ class GDClientManagerTester(unittest.TestCase):
         """
         import gdata.docs.client
         
-        account=self._am.get_accounts().pop()
+        
+        account=self._confMan.get_account()
 
         self._gdcm.authenticate_client(account)
 
@@ -55,16 +58,18 @@ class GDActionsManagerTester(unittest.TestCase):
         """
         import Authentication
         import GDocs
+        import Configuration
         import gdata.docs.client
         self._am=Authentication.AccountManager()
         self._gdcm=GDocs.GDClientManager()
         self._gdam=GDocs.GDActionsManager(self._gdcm)
+        self._confMan=Configuration.ConfigurationManager()
     
     def test_file_download(self):
         """Tests the file download functionality
         """
         
-        account=self._am.get_accounts().pop()
+        account=self._confMan.get_account()
 
         
         
@@ -80,7 +85,7 @@ class GDActionsManagerTester(unittest.TestCase):
         """
         import gdata.docs.data
         
-        account=self._am.get_accounts().pop()
+        account=self._confMan.get_account()
 
         self._gdcm.authenticate_client(account)
         #self._gdcm.set_proxy("http://cache.mrt.ac.lk","3128")
@@ -100,7 +105,7 @@ class GDActionsManagerTester(unittest.TestCase):
     def test_get_all_folders(self):
         """Tests the get_all_folders() method
         """
-        account=self._am.get_accounts().pop()
+        account=self._confMan.get_account()
 
         self._gdcm.authenticate_client(account)
 
@@ -111,7 +116,7 @@ class GDActionsManagerTester(unittest.TestCase):
     def test_get_folder_hierarchy(self):
         """Tests the g
     """
-        account=self._am.get_accounts().pop()
+        account=self._confMan.get_account()
         self._gdcm.authenticate_client(account)
         
         self._gdam.get_folder_hierarchy()

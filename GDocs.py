@@ -27,6 +27,8 @@ class GDClientManager():
         Arguments:
         - `account`:
         """
+
+        
         self._CONSUMER_KEY=account.get_consumer_key()
         self._CONSUMER_SECRET=account.get_consumer_secret()
         self._TOKEN=account.get_access_token()
