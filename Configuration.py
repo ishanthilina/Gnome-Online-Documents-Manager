@@ -74,6 +74,14 @@ class ConfigurationManager():
         with open('settings.cfg', 'wb') as configfile:
             self._scp.write(configfile)
 
+    def get_persist_active(self):
+        """Returns whether the persisted account is marked as active or not 
+        """
+        if self._scp.get('acc_info','has_default')=='True':
+            return True
+        else:
+            return False
+
     def get_account(self):
         """Returns the current selected account
         """
@@ -211,3 +219,8 @@ class ConfigurationManager():
         http_proxy=self._scp.get("proxy_data","http")
         https_proxy=self._scp.get("proxy_data","https")
         return [http_proxy,https_proxy]
+
+    def get_proxy_from(self):
+        """Returns from where the proxy settings are retrieved
+        """
+        return self._scp.get("proxy_data","get_from")

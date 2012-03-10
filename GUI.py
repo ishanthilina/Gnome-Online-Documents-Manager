@@ -102,6 +102,10 @@ class SettingsWindow():
 		else:
 			self._accLabel.set_text('None')
 
+
+		
+	
+
 		#set text for the currently persisted proxy settings
 		httpUrl=self._confMan.get_persited_proxy()[0].split(':')[0]
 		httpPort=self._confMan.get_persited_proxy()[0].split(':')[1]
@@ -128,10 +132,34 @@ class SettingsWindow():
 			#pass
                 
 		self._accountsList.set_active(0)
-		
-		self._accountsList.set_sensitive(False)
-		self._cbRememberAcc.set_sensitive(False)
 
+
+
+
+		#select the proper account selection method
+		if self._confMan.get_persist_active():
+			self._rbFromPersist.set_active(True)
+			self._accountsList.set_sensitive(False)
+			self._cbRememberAcc.set_sensitive(False)
+
+			
+		else:
+			self._rbFromList.set_active(True)
+			self._accountsList.set_sensitive(True)
+			self._cbRememberAcc.set_sensitive(True)
+
+
+		#Show the current proxy usage method
+		get_proxy_from=self._confMan.get_proxy_from()
+
+                if get_proxy_from=='none':
+			self._rbNoProxy.set_active(True)
+		elif get_proxy_from=='file':
+			self._rbCustProxy.set_active(True)
+		elif get_proxy_from=='system':
+			self._rbSysProxy.set_active(True)
+                
+	
 		
 	def cb_use_the_acc_selected(self,arg):
 		"""Event handler
