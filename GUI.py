@@ -40,6 +40,58 @@ class GUIManager():
 		"""Shows the export Documents window
 		"""
 		window=ExportGDocsWindow(self._gdam,self._confMan)
+
+	def show_settings_window(self):
+		"""Shows the settings window
+		"""
+		window=SettingsWindow(self._confMan)
+
+
+
+class SettingsWindow():
+	"""Shows the Settings  window for the system
+	"""
+	
+	def __init__(self,confMan):
+		"""
+		
+                Arguments:
+                - `gdam`:GDocs.GDActionsManager
+		- `confMan`:Configuration.ConfigurationManager
+                """
+		#self._gdam = gdam
+		self._confMan=confMan
+
+                #load and setup the GUI components
+
+               
+		filename = confMan.get_system_path()+"SettingsWindow.glade"
+		builder = gtk.Builder()
+		builder.add_from_file(filename)
+		builder.connect_signals(self)
+		
+		self._accountsList=builder.get_object('Combo_AccountsList')
+		
+		accList=gtk.ListStore(str)
+		
+		cell = gtk.CellRendererText()
+		self._accountsList.pack_start(cell, True)
+		self._accountsList.add_attribute(cell, 'text', 0)
+		self._accountsList.set_model(accList)
+
+                accList.append(['ss'])
+		self._accountsList.set_active(0)
+		
+
+		
+	
+
+
+	def destroy_all(self,arg):
+		"""Destroy everything
+		"""
+		gtk.main_quit()
+
 		
 
 class ExportGDocsWindow():
@@ -323,8 +375,13 @@ if __name__ == "__main__":
 		
 		elif( sys.argv[1] == 'export' ):
 
-		        print 'save'
+		        
 	        	guiM.show_export_window()
+
+		elif( sys.argv[1] == 'settings' ):
+
+		        
+	        	guiM.show_settings_window()
 	
 	#
 	#t=Test()
