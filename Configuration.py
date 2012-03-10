@@ -30,7 +30,7 @@ class ConfigurationManager():
             return self._am.get_accounts()[accountName]
         
         
-        return account
+        return None
 
     def get_system_path(self):
         """Returns the path of the place where the python scripts are

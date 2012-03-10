@@ -17,49 +17,13 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkRadioButton" id="rbFromPersist">
-                <property name="label" translatable="yes">Use the account : </property>
-                <property name="height_request">27</property>
+              <object class="GtkHSeparator" id="separator1">
+                <property name="width_request">500</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_action_appearance">False</property>
-                <property name="xalign">0</property>
-                <property name="active">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="can_focus">False</property>
               </object>
               <packing>
-                <property name="x">41</property>
-                <property name="y">12</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkRadioButton" id="rbFromList">
-                <property name="label" translatable="yes">Select account :</property>
-                <property name="height_request">27</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_action_appearance">False</property>
-                <property name="xalign">0</property>
-                <property name="active">True</property>
-                <property name="draw_indicator">True</property>
-                <property name="group">rbFromPersist</property>
-              </object>
-              <packing>
-                <property name="x">41</property>
-                <property name="y">45</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkComboBox" id="Combo_AccountsList">
-                <property name="width_request">310</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-              </object>
-              <packing>
-                <property name="x">67</property>
-                <property name="y">75</property>
+                <property name="y">173</property>
               </packing>
             </child>
             <child>
@@ -68,10 +32,13 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">label</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
               </object>
               <packing>
                 <property name="x">183</property>
-                <property name="y">16</property>
+                <property name="y">33</property>
               </packing>
             </child>
             <child>
@@ -87,24 +54,148 @@
               </object>
               <packing>
                 <property name="x">71</property>
-                <property name="y">103</property>
+                <property name="y">141</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBox" id="Combo_AccountsList">
+                <property name="width_request">310</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+              </object>
+              <packing>
+                <property name="x">67</property>
+                <property name="y">101</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkRadioButton" id="rbFromList">
+                <property name="label" translatable="yes">Select account :</property>
+                <property name="height_request">27</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="use_action_appearance">False</property>
+                <property name="xalign">0</property>
+                <property name="active">True</property>
+                <property name="draw_indicator">True</property>
+                <property name="group">rbFromPersist</property>
+                <signal name="toggled" handler="cb_from_list_selected" swapped="no"/>
+              </object>
+              <packing>
+                <property name="x">41</property>
+                <property name="y">71</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkRadioButton" id="rbFromPersist">
+                <property name="label" translatable="yes">Use the account : </property>
+                <property name="width_request">147</property>
+                <property name="height_request">27</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="use_action_appearance">False</property>
+                <property name="xalign">0</property>
+                <property name="active">True</property>
+                <property name="draw_indicator">True</property>
+                <signal name="toggled" handler="cb_use_the_acc_selected" swapped="no"/>
+              </object>
+              <packing>
+                <property name="x">41</property>
+                <property name="y">30</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label1">
+                <property name="width_request">62</property>
+                <property name="height_request">23</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Accounts</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="x">19</property>
+                <property name="y">7</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkFixed" id="fixed2">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkRadioButton" id="radiobutton1">
+                <property name="label" translatable="yes">radiobutton</property>
+                <property name="width_request">105</property>
+                <property name="height_request">27</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="use_action_appearance">False</property>
+                <property name="xalign">0</property>
+                <property name="active">True</property>
+                <property name="draw_indicator">True</property>
+              </object>
+              <packing>
+                <property name="x">51</property>
               </packing>
             </child>
           </object>
           <packing>
             <property name="expand">True</property>
             <property name="fill">True</property>
-            <property name="position">1</property>
+            <property name="position">2</property>
           </packing>
         </child>
         <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
+          <object class="GtkFixed" id="fixed3">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkHButtonBox" id="buttonbox1">
+                <property name="width_request">204</property>
+                <property name="height_request">80</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="spacing">34</property>
+                <property name="layout_style">start</property>
+                <child>
+                  <object class="GtkButton" id="butApply">
+                    <property name="label" translatable="yes">Apply</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="use_action_appearance">False</property>
+                    <signal name="released" handler="apply_but_clicked" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="x">356</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">3</property>
+          </packing>
         </child>
       </object>
     </child>

@@ -1,6 +1,7 @@
 import sys
 import GDocs
 import Configuration
+import Authentication
 import os
 import gobject
 try:
@@ -28,6 +29,7 @@ class GUIManager():
 		self._gdcm=GDocs.GDClientManager()
 		self._gdam=GDocs.GDActionsManager(self._gdcm)
 		self._gdcm.authenticate_client(account)
+		self._accMan=Authentication.AccountManager()
 
 
 	def show_import_window(self):
@@ -44,7 +46,7 @@ class GUIManager():
 	def show_settings_window(self):
 		"""Shows the settings window
 		"""
-		window=SettingsWindow(self._confMan)
+		window=SettingsWindow(self._confMan,self._accMan)
 
 
 
@@ -52,15 +54,18 @@ class SettingsWindow():
 	"""Shows the Settings  window for the system
 	"""
 	
-	def __init__(self,confMan):
+	def __init__(self,confMan,accMan):
 		"""
 		
                 Arguments:
                 - `gdam`:GDocs.GDActionsManager
 		- `confMan`:Configuration.ConfigurationManager
+		-`accMan`:Authentication.AccountManager
                 """
 		#self._gdam = gdam
 		self._confMan=confMan
+		self._accMan=accMan
+		
 
                 #load and setup the GUI components
 
@@ -71,20 +76,65 @@ class SettingsWindow():
 		builder.connect_signals(self)
 		
 		self._accountsList=builder.get_object('Combo_AccountsList')
+		self._rbFromPersist=builder.get_object('rbFromPersist')
+		self._rbFromList=builder.get_object('rbFromList')
+		self._cbRememberAcc=builder.get_object('cbRememberAcc')
+		self._accLabel=builder.get_object('accLabel')
+
+                #Set text for the current selected default account
+                if self._confMan.get_account():
+			self._accLabel.set_text(self._confMan.get_account().get_email())
+		else:
+			self._accLabel.set_text('None')
+                
 		
-		accList=gtk.ListStore(str)
+		
+		accList=gtk.ListStore(str,gobject.TYPE_PYOBJECT )
 		
 		cell = gtk.CellRendererText()
 		self._accountsList.pack_start(cell, True)
 		self._accountsList.add_attribute(cell, 'text', 0)
 		self._accountsList.set_model(accList)
 
-                accList.append(['ss'])
+		#add the accounts to the list
+		for accName,accObj in self._accMan.get_accounts().iteritems():
+			
+			accList.append([accName,accObj])
+                
+                
 		self._accountsList.set_active(0)
 		
+		self._accountsList.set_sensitive(False)
+		self._cbRememberAcc.set_sensitive(False)
 
 		
+	def cb_use_the_acc_selected(self,arg):
+		"""Event handler
+		"""
 	
+		self._accountsList.set_sensitive(False)
+		self._cbRememberAcc.set_sensitive(False)
+
+	def cb_from_list_selected(self,arg):
+		"""Event handler
+		"""
+		self._accountsList.set_sensitive(True)
+		self._cbRememberAcc.set_sensitive(True)
+
+	def apply_but_clicked(self, args):
+		"""
+		
+		Arguments:
+		- `args`:
+		"""
+		##Handle Account settings first
+
+                
+                
+                
+
+                ##Handle proxy settings
+
 
 
 	def destroy_all(self,arg):
