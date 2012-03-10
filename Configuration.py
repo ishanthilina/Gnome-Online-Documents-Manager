@@ -1,6 +1,9 @@
+from gi.repository import Gio
 import Authentication
 import os
 import ConfigParser
+
+
 
 class ConfigurationManager():
     """Provides an interface to access and configure the extension settings
@@ -92,7 +95,7 @@ class ConfigurationManager():
         
         return os.path.expanduser('~')+"/"+self._scp.get("file_path","path")
 
-    def set_proxy(self, url,port):
+    def set_proxy(self, http,https):
         """
         Sets proxy for the environment of the script
         
@@ -101,12 +104,24 @@ class ConfigurationManager():
         - `port`:port of the proxy server
         """
         #Set the proxy only if valid arguments are passed
-        if url and port:
+        if http and https:
         
-            os.environ['http_proxy']=url+":"+port
-            os.environ['https_proxy']=url+":"+port
+            os.environ['http_proxy']=http
+            os.environ['https_proxy']=https
 
-    def get_proxy(self, ):
+
+        elif not http and not https:
+            os.environ['http_proxy']=''
+            os.environ['https_proxy']=''
+            
+        print http
+        print https
+
+        print  os.environ['http_proxy']
+
+        print os.environ['https_proxy']
+
+    def get_proxy(self):
         """Returns the proxy settings as an array 
         Array[0]=http proxy settings
         Array[1]=https proxy settings
@@ -178,3 +193,14 @@ class ConfigurationManager():
         with open('settings.cfg', 'wb') as configfile:
             self._scp.write(configfile)
         
+    def set_proxy_type(self, type):
+        """Persists the type of proxy that needs to be used
+    
+    Arguments:
+    - `type`:String - none, file, system
+    """
+        self._scp.set('proxy_data','get_from',type)
+
+        # Writing our configuration file
+        with open('settings.cfg', 'wb') as configfile:
+            self._scp.write(configfile)

@@ -112,7 +112,7 @@ class SettingsWindow():
 		for accName,accObj in self._accMan.get_accounts().iteritems():
 			
 			accList.append([accName,accObj])
-                
+			#pass
                 
 		self._accountsList.set_active(0)
 		
@@ -163,6 +163,16 @@ class SettingsWindow():
                 
 
                 ##Handle proxy settings
+
+                #if no proxy is used
+                if self._rbNoProxy.get_active():
+			self._confMan.set_proxy_type('none')
+			self._confMan.set_proxy(None,None)
+
+		#if system proxy is used
+		elif self._rbSysProxy.get_active():
+			self._confMan.set_proxy_type('system')
+			self._confMan.set_proxy(self._confMan.get_proxy()[0],self._confMan.get_proxy()[1])
 
 	def disable_custom_proxy(self, args):
 		"""Disables the custom proxy related widgets
