@@ -3,18 +3,21 @@ import GDocs
 import Configuration
 import Authentication
 import os
-import gobject
-try:
- 	import pygtk
-  	pygtk.require("2.0")
-except:
-  	pass
-try:
-	import gtk
-  	import gtk.glade
-except:
-	sys.exit(1)
+from gi.repository import Gtk as gtk
+from gi.repository import GObject as gobject
 
+# try:
+#  	import pygtk
+#   	pygtk.require("2.0")
+# except:
+#   	pass
+# try:
+# 	import gtk
+#   	import gtk.glade
+# except:
+# 	sys.exit(1)
+
+#import gobject
 
 class GUIManager():
 	"""Provides an interface to access the GUI functionality
@@ -389,11 +392,11 @@ class ImportGDocsWindow():
 		# print type(arg3)
 		# print (DocumentsSaveAsWindow())
 		dialog_buttons = (gtk.STOCK_CANCEL
-					, gtk.RESPONSE_CANCEL
+					, gtk.ResponseType.CANCEL
 					, gtk.STOCK_SAVE
-					, gtk.RESPONSE_OK)
+					, gtk.ResponseType.OK)
 		file_dialog = gtk.FileChooserDialog(title="Select Save Location"
-				, action=gtk.FILE_CHOOSER_ACTION_SAVE
+				, action=gtk.FileChooserAction.SAVE
 				, buttons=dialog_buttons)
 		filter = gtk.FileFilter()
 		filter.set_name("*.odt")
@@ -401,7 +404,7 @@ class ImportGDocsWindow():
 		file_dialog.add_filter(filter)
 
                 result = ""
-		if file_dialog.run() == gtk.RESPONSE_OK:
+		if file_dialog.run() == gtk.ResponseType.OK:
 			result = file_dialog.get_filename()
 			
 		file_dialog.destroy()
@@ -445,9 +448,9 @@ class ImportGDocsWindow():
 		error_string - The error string that will be displayed
 		on the dialog.
 		"""
-		error_dlg = gtk.MessageDialog(type=gtk.MESSAGE_ERROR
+		error_dlg = gtk.MessageDialog(type=gtk.MessageType.ERROR
 					      , message_format=error_string
-					      , buttons=gtk.BUTTONS_OK)
+					      , buttons=gtk.ButtonsType.OK)
 		error_dlg.run()
 		error_dlg.destroy()
 
