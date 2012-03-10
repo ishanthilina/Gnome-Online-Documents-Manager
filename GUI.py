@@ -101,7 +101,17 @@ class SettingsWindow():
 			self._accLabel.set_text(self._confMan.get_account().get_email())
 		else:
 			self._accLabel.set_text('None')
-                
+
+		#set text for the currently persisted proxy settings
+		httpUrl=self._confMan.get_persited_proxy()[0].split(':')[0]
+		httpPort=self._confMan.get_persited_proxy()[0].split(':')[1]
+		httpsUrl=self._confMan.get_persited_proxy()[1].split(':')[0]
+		httpsPort=self._confMan.get_persited_proxy()[1].split(':')[1]
+		self._tbHttp.set_text(httpUrl)
+		self._tbHttpPort.set_text(httpPort)
+		self._tbHttps.set_text(httpsUrl)
+		self._tbHttpsPort.set_text(httpsPort)
+		
 		
 		
 		accList=gtk.ListStore(str,gobject.TYPE_PYOBJECT )
@@ -176,6 +186,14 @@ class SettingsWindow():
 		elif self._rbSysProxy.get_active():
 			self._confMan.set_proxy_type('system')
 			self._confMan.set_proxy(self._confMan.get_proxy()[0],self._confMan.get_proxy()[1])
+
+		#if a custom proxy setting is to be used
+		elif self._rbCustProxy.get_active():
+			self._confMan.set_proxy_type('file')
+			http=self._tbHttp.get_text()+':'+self._tbHttpPort.get_text()
+			https=self._tbHttps.get_text()+':'+self._tbHttpsPort.get_text()
+			self._confMan.set_proxy(http,https)
+			self._confMan.persist_proxy(http,https)
 
 	def disable_custom_proxy(self, args):
 		"""Disables the custom proxy related widgets

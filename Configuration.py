@@ -171,7 +171,7 @@ class ConfigurationManager():
         #     username = password = None
         return [mode,http_host+":"+http_port,https_host+":"+https_port]   
 
-    def persist_proxy(self, http_url,http_port,https_url,https_port):
+    def persist_proxy(self, http,https):
         """
         
         Arguments:
@@ -186,8 +186,8 @@ class ConfigurationManager():
         ##http://http://www.cache.mrt.ac.lk
        
         #self._cp.add_section('proxy_data')
-        self._scp.set('proxy_data','http',http_url+':'+http_port)
-        self._scp.set('proxy_data','https',https_url+':'+https_port)
+        self._scp.set('proxy_data','http',http)
+        self._scp.set('proxy_data','https',https)
                 
         # Writing our configuration file
         with open('settings.cfg', 'wb') as configfile:
@@ -204,3 +204,10 @@ class ConfigurationManager():
         # Writing our configuration file
         with open('settings.cfg', 'wb') as configfile:
             self._scp.write(configfile)
+
+    def get_persited_proxy(self):
+        """Returns the persisted proxy settings
+        """
+        http_proxy=self._scp.get("proxy_data","http")
+        https_proxy=self._scp.get("proxy_data","https")
+        return [http_proxy,https_proxy]
