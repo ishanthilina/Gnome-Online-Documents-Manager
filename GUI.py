@@ -2,6 +2,7 @@ import sys
 import GDocs
 import Configuration
 import os
+import gobject
 try:
  	import pygtk
   	pygtk.require("2.0")
@@ -35,10 +36,62 @@ class GUIManager():
                 window=ImportGDocsWindow(self._gdam,self._confMan)
 		#window=MainWindow()
 
-	def show_export_window(self, ):
+	def show_export_window(self):
 		"""Shows the export Documents window
 		"""
 		window=ExportGDocsWindow(self._gdam,self._confMan)
+
+	def show_settings_window(self):
+		"""Shows the settings window
+		"""
+		window=SettingsWindow(self._confMan)
+
+
+
+class SettingsWindow():
+	"""Shows the Settings  window for the system
+	"""
+	
+	def __init__(self,confMan):
+		"""
+		
+                Arguments:
+                - `gdam`:GDocs.GDActionsManager
+		- `confMan`:Configuration.ConfigurationManager
+                """
+		#self._gdam = gdam
+		self._confMan=confMan
+
+                #load and setup the GUI components
+
+               
+		filename = confMan.get_system_path()+"SettingsWindow.glade"
+		builder = gtk.Builder()
+		builder.add_from_file(filename)
+		builder.connect_signals(self)
+		
+		self._accountsList=builder.get_object('Combo_AccountsList')
+		
+		accList=gtk.ListStore(str)
+		
+		cell = gtk.CellRendererText()
+		self._accountsList.pack_start(cell, True)
+		self._accountsList.add_attribute(cell, 'text', 0)
+		self._accountsList.set_model(accList)
+
+                accList.append(['ss'])
+		self._accountsList.set_active(0)
+		
+
+		
+	
+
+
+	def destroy_all(self,arg):
+		"""Destroy everything
+		"""
+		gtk.main_quit()
+
 		
 
 class ExportGDocsWindow():
@@ -53,6 +106,7 @@ class ExportGDocsWindow():
 		- `confMan`:Configuration.ConfigurationManager
                 """
 		self._gdam = gdam
+		self._confMan=confMan
 
                 #load and setup the GUI components
 
@@ -64,18 +118,80 @@ class ExportGDocsWindow():
 		
 		self._FolderTreeView=builder.get_object('FolderTreeView')
 
-		col_type=gtk.TreeViewColumn('Name')
-		col_type.set_resizable(True)
-		self._FolderTreeView.append_column(col_type)
-
-                col_name=gtk.TreeViewColumn('Add?',gtk.CellRendererText(),active=1)
+		col_name=gtk.TreeViewColumn('')
 		col_name.set_resizable(True)
 		self._FolderTreeView.append_column(col_name)
 
+                self._folderList=gtk.TreeStore( gobject.TYPE_STRING,
+                                         gobject.TYPE_BOOLEAN,gobject.TYPE_PYOBJECT )
+
+                renderer=gtk.CellRendererToggle()
+		renderer.set_property('activatable', True)
+		renderer.connect( 'toggled', self.col1_toggled_cb, self._folderList )
+		#renderer.set_sensitive(True)
+
+                col_select=gtk.TreeViewColumn('Folder Name',renderer)
+		col_select.add_attribute(renderer, "active", 1)
+	
+		col_select.set_resizable(True)
+		self._FolderTreeView.append_column(col_select)
+
+		
+	
+		self._FolderTreeView.set_model(self._folderList)
+
+                #add folder data
+		folders=self._gdam.get_folder_hierarchy()
+
+                for folder in folders:
+			print folder.title.text
+			self._folderList.append(None,(folder.title.text,None,folder))
+			
+			#p= FolderList.append(None, ('1',None))
+			#	FolderList.append(p, ('2',None))
+
+                cell = gtk.CellRendererText()
+		cell.set_property( 'editable', True )
+		col_select.pack_start(cell,False)
+		col_select.add_attribute(cell,"text",0)
+
+	def upload(self):
+		"""Upload a doc to Google docs upon GUI call
+		"""
+		#TODO: Add multi folder support
+		folders=self.get_selected_folders()
 		
 		
+                
+	def col1_toggled_cb( self, cell, path, model ):
+		"""
+		Sets the toggled state on the toggle button to true or false.
+		"""
+		
 
+		model[path][1] = not model[path][1]
 
+		return
+	
+	def get_selected_folders(self):
+		"""Returns the selected folders as a list
+		"""
+		selected=[]
+
+                for folder in self._folderList:
+		
+			if  folder[1]:
+				selected.append(folder[2])
+			
+
+		return selected
+
+	def destroy_all(self,arg):
+		"""Destroy everything
+		"""
+		gtk.main_quit()
+
+		
 class ImportGDocsWindow():
 	"""Shows the import Google Docs windows
 	"""
@@ -128,6 +244,8 @@ class ImportGDocsWindow():
 			
 			DocList.append([data[0],data[1],"Folder",data[2]])
 			#print doc.resource_id
+			#TODO: There's a more elegant way to do this
+			#http://faq.pygtk.org/index.py?req=show&file=faq13.015.htp
 			self._entryList[doc.resource_id.text]=doc
 			
 
@@ -206,6 +324,7 @@ class ImportGDocsWindow():
 			return
 		self.on_save_button(arg1)
 		os.system("soffice "+self._entry_fileSaveLocation.get_text())
+		self.destroy_all(None)
 
 	def show_error_dlg(self, error_string):
 		"""This Function is used to show an error dialog when
@@ -246,8 +365,24 @@ class Test(object):
 
 
 if __name__ == "__main__":
+
+        guiM=GUIManager()
 	
-	guiM=GUIManager()
-	guiM.show_import_window()
+	if (len(sys.argv) > 1):
+		if( sys.argv[1] == 'import' ):
+		
+	        	guiM.show_import_window()
+		
+		elif( sys.argv[1] == 'export' ):
+
+		        
+	        	guiM.show_export_window()
+
+		elif( sys.argv[1] == 'settings' ):
+
+		        
+	        	guiM.show_settings_window()
+	
+	#
 	#t=Test()
-        gtk.main()
+	gtk.main()

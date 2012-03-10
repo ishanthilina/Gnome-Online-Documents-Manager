@@ -87,13 +87,14 @@ class GDActionsManagerTester(unittest.TestCase):
 
 
         #col=self._gdam.get_all_folders().pop()
+        #self._gdam.get_doc_data(col)
         col=None
         # print col.title.text
 
         print 'Uploading doc'
-        doc=self._gdam.upload_new_doc('/home/ishan/up.odt',col,"My testing upload")
-        print 'updating doc'
-        self._gdam.update_doc(doc,'/home/ishan/ddd.odt')
+        #doc=self._gdam.upload_new_doc('/home/ishan/up.odt',col,"My testing upload")
+        #print 'updating doc'
+        #self._gdam.update_doc(doc,'/home/ishan/ddd.odt')
         #self.assertIsInstance(doc,gdata.docs.data.Resource,"Class type does not match.")
 
     def test_get_all_folders(self):
@@ -103,8 +104,18 @@ class GDActionsManagerTester(unittest.TestCase):
 
         self._gdcm.authenticate_client(account)
 
-        # for folder in self._gdam.get_all_folders():
-        #     print folder.title.text
+        #for folder in self._gdam.get_all_folders():
+        #   print folder.title.text
+            #self._gdam.get_sub_folders(folder)
+
+    def test_get_folder_hierarchy(self):
+        """Tests the g
+    """
+        account=self._am.get_accounts().pop()
+        self._gdcm.authenticate_client(account)
+        
+        self._gdam.get_folder_hierarchy()
+        
         
 #test suite
 suite1 = unittest.TestLoader().loadTestsFromTestCase(GDClientManagerTester)

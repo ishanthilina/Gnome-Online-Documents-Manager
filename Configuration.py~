@@ -13,7 +13,7 @@ class ConfigurationManager():
         
         self._scp=ConfigParser.SafeConfigParser()
 
-       #config file to read
+       
         self._scp.read('settings.cfg')
         
 
