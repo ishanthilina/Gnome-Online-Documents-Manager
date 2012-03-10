@@ -12,12 +12,12 @@ class GDClientManager():
     """Handles the creation, authenitcation of GDocs clients
     """
     
-    def __init__(self):
+    def __init__(self,confMan):
         """
         """
         self._client = gdata.docs.client.DocsClient(source='yourCo-yourAppName-v1')
         self._client.ssl=True
-
+        self._confMan=confMan
         
         #Keep a boolean to verify whether the client has been authenticated or not
         self._is_Authenticated=False
@@ -43,6 +43,7 @@ class GDClientManager():
         except gdata.client.Error:
             exit('Login Error')
 
+        self._confMan.set_proxy(self._confMan.get_proxy()[0],self._confMan.get_proxy()[1])
         self._is_Authenticated=True
 
     def get_client(self):

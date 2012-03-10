@@ -122,13 +122,7 @@ class ConfigurationManager():
             os.environ['http_proxy']=''
             os.environ['https_proxy']=''
             
-        print http
-        print https
-
-        print  os.environ['http_proxy']
-
-        print os.environ['https_proxy']
-
+       
     def get_proxy(self):
         """Returns the proxy settings as an array 
         Array[0]=http proxy settings

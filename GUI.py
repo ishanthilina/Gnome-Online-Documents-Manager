@@ -29,7 +29,7 @@ class GUIManager():
 		#TODO: Find an elegant way to do this.
 		self._confMan=Configuration.ConfigurationManager()
 		account=self._confMan.get_account()
-		self._gdcm=GDocs.GDClientManager()
+		self._gdcm=GDocs.GDClientManager(self._confMan)
 		self._gdam=GDocs.GDActionsManager(self._gdcm)
 		self._gdcm.authenticate_client(account)
 		self._accMan=Authentication.AccountManager()
