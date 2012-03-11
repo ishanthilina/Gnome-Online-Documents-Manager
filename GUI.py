@@ -401,9 +401,20 @@ class ImportGDocsWindow():
 		
 		for doc in self._gdam.get_all_documents().entry:
 			data= self._gdam.get_doc_data(doc)
-			#print dir(data)
 			
-			DocList.append([data[0],data[1],"Folder",doc])
+			#Get collection info
+			collectionList=None
+                        for entry in doc.InCollections():
+				for title in entry.GetAttributes(tag='title'):
+					collectionList=title.value+','
+
+			if collectionList:
+				#remove the last comma
+				collectionList=collectionList[0:len(collectionList)-1]
+
+			collectionList=str(collectionList)
+			
+			DocList.append([data[0],data[1],collectionList,doc])
 			#print doc.resource_id
 			#TODO: There's a more elegant way to do this
 			#http://faq.pygtk.org/index.py?req=show&file=faq13.015.htp
