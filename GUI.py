@@ -483,9 +483,12 @@ class ImportGDocsWindow():
                 #if this is a doc
 		if resource.GetResourceType()=='document':
 			self._gdam.download_doc(resource,filePath)
+		#if this is a spreadsheet
 		elif resource.GetResourceType()=='spreadsheet':
 			self._gdam.download_spreadsheet(filePath,resource,'xls')
-                
+		#if this is a presentation
+		elif resource.GetResourceType()=='presentation':
+			self._gdam.download_spreadsheet(filePath,resource,'ppt')
 		
 		
 

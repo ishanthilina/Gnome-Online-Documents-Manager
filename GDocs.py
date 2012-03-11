@@ -195,7 +195,7 @@ class GDActionsManager():
     - `format`:String- format to be downloaded
     """
         client=self.__create_client()
-        client.DownloadResource(entry,path,extra_params={'gid': 0, 'exportFormat': format})
+        client.DownloadResource(entry,path,extra_params={'exportFormat': format})
 
     def upload_new_doc(self, path,col,doc_title):
         """Uploads a new document to Google Docs
