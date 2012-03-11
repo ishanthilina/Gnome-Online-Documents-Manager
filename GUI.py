@@ -394,21 +394,20 @@ class ImportGDocsWindow():
 		self._DocTreeView.append_column(col_folders)
 
                 #The last str is to store the resource_id
-                DocList=gtk.ListStore(str,str,str,str)
+                DocList=gtk.ListStore(str,str,str,gobject.TYPE_PYOBJECT)
 		self._DocTreeView.set_model(DocList)
 
-                ##stores the dictionary of Gdocs sentries
-		self._entryList={}
+		
 		
 		for doc in self._gdam.get_all_documents().entry:
 			data= self._gdam.get_doc_data(doc)
 			#print dir(data)
 			
-			DocList.append([data[0],data[1],"Folder",data[2]])
+			DocList.append([data[0],data[1],"Folder",doc])
 			#print doc.resource_id
 			#TODO: There's a more elegant way to do this
 			#http://faq.pygtk.org/index.py?req=show&file=faq13.015.htp
-			self._entryList[doc.resource_id.text]=doc
+			
 			
 
 			#itr=DocList.append([1,'2','3'])
@@ -468,11 +467,11 @@ class ImportGDocsWindow():
 		path=self._DocTreeView.get_selection().get_selected_rows()[1]
 		#print path[0]
 		iter=treeModel.get_iter(path[0])
-		resourceID= treeModel.get_value(iter,3)
-
+		resource= treeModel.get_value(iter,3)
+		
                 
 		
-		self._gdam.download_doc(self._entryList[resourceID],filePath)
+		self._gdam.download_doc(resource,filePath)
 
 	def on_save_n_open_button(self, arg1):
 		"""Saves the given doc and opens it in Libre office
