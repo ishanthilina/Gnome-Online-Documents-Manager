@@ -506,10 +506,22 @@ class ImportGDocsWindow():
 		"""Saves the given Doc
 		"""
 		filePath=self._entry_fileSaveLocation.get_text()
+		#file extension
+		ext=filePath.split('.')[-1]
+		
+		
+                #if the extension is not set
+		if not ext:
+			self.show_error_dlg("File extension is not set")
+			return
+
+                #if file path is not set
 		if len(filePath)==0:
 			self.show_error_dlg("File path is empty")
 			return
-		treeModel=self._DocTreeView.get_selection().get_selected_rows()[0]
+
+		#get the selected resource
+                treeModel=self._DocTreeView.get_selection().get_selected_rows()[0]
 		path=self._DocTreeView.get_selection().get_selected_rows()[1]
 		#print path[0]
 		iter=treeModel.get_iter(path[0])
@@ -517,13 +529,26 @@ class ImportGDocsWindow():
 
                 #if this is a doc
 		if resource.GetResourceType()=='document':
-			self._gdam.download_doc(resource,filePath)
+			#if the extension matches
+			if ext in ['doc','odt','rtf']:
+				self._gdam.download_doc(resource,filePath,ext)
+			else:
+				self.show_error_dlg("Wrong file type. Supported file types are doc,odt,rtf")
 		#if this is a spreadsheet
 		elif resource.GetResourceType()=='spreadsheet':
-			self._gdam.download_spreadsheet(filePath,resource,'xls')
+			#if the extension matches
+			if ext in ['xls','ods']:
+				self._gdam.download_spreadsheet(filePath,resource,ext)
+			else:
+				self.show_error_dlg('Wrong file type.Supported file types are xls,doc')
 		#if this is a presentation
 		elif resource.GetResourceType()=='presentation':
-			self._gdam.download_spreadsheet(filePath,resource,'ppt')
+
+                        #if the extension matches
+			if ext in ['ppt']:
+				self._gdam.download_spreadsheet(filePath,resource,ext)
+			else:
+				self.show_error_dlg('Wrong file type. Supported file types include ppt')
 		
 		
 

@@ -159,13 +159,14 @@ class GDActionsManager():
         
         
 
-    def download_doc(self, entry,path):
+    def download_doc(self, entry,path,format):
         """Downloads a given entry to the path under a given name
         
         Arguments:
         - `entry`:gdata.docs.data.Resource
         - `path`:string
         - `name`:string
+        - `format`:String- format to be downloaded
         """
         client=self.__create_client()
 
@@ -184,7 +185,7 @@ class GDActionsManager():
         # full_path=os.path.join(path,name+doc_type)
         # print full_path
         
-        client.DownloadResource(entry,path)
+        client.DownloadResource(entry,path,extra_params={'exportFormat': format})
 
     def download_spreadsheet(self, path,entry,format):
         """Downloads the given spreadsheet
