@@ -433,6 +433,12 @@ class ImportGDocsWindow():
                 self._but_save=builder.get_object('but_save')
 		#self._but_save.set_visible(False)
 
+
+
+                #select the default entry in the list
+		self._DocTreeView.get_selection().select_path(0)
+		
+
 	def destroy_all(self,arg):
 		"""Destroy everything
 		"""
@@ -443,10 +449,16 @@ class ImportGDocsWindow():
 	def on_set_save_location(self,arg1,arg2,arg3):
 		"""
 		"""
-		# print type(arg1)
-		# print type(arg2)
-		# print type(arg3)
-		# print (DocumentsSaveAsWindow())
+		
+
+		# #if a file has been already choosen
+		# treeModel=self._DocTreeView.get_selection().get_selected_rows()[0]
+		# path=self._DocTreeView.get_selection().get_selected_rows()[1]
+		# #print path[0]
+		# iter=treeModel.get_iter(path[0])
+		# resource= treeModel.get_value(iter,3)
+
+                
 		dialog_buttons = (gtk.STOCK_CANCEL
 					, gtk.ResponseType.CANCEL
 					, gtk.STOCK_SAVE
@@ -454,9 +466,15 @@ class ImportGDocsWindow():
 		file_dialog = gtk.FileChooserDialog(title="Select Save Location"
 				, action=gtk.FileChooserAction.SAVE
 				, buttons=dialog_buttons)
-		filter = gtk.FileFilter()
+
+                filter = gtk.FileFilter()
 		filter.set_name("*.odt")
 		filter.add_pattern("*.odt")
+		file_dialog.add_filter(filter)
+
+                filter = gtk.FileFilter()
+		filter.set_name("*.doc")
+		filter.add_pattern("*.doc")
 		file_dialog.add_filter(filter)
 
                 result = ""
