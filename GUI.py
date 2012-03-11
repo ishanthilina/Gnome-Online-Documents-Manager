@@ -451,12 +451,9 @@ class ImportGDocsWindow():
 		"""
 		
 
-		# #if a file has been already choosen
-		# treeModel=self._DocTreeView.get_selection().get_selected_rows()[0]
-		# path=self._DocTreeView.get_selection().get_selected_rows()[1]
-		# #print path[0]
-		# iter=treeModel.get_iter(path[0])
-		# resource= treeModel.get_value(iter,3)
+		
+
+                
 
                 
 		dialog_buttons = (gtk.STOCK_CANCEL
@@ -476,6 +473,26 @@ class ImportGDocsWindow():
 		filter.set_name("*.doc")
 		filter.add_pattern("*.doc")
 		file_dialog.add_filter(filter)
+
+		##set the default name
+		treeModel=self._DocTreeView.get_selection().get_selected_rows()[0]
+		path=self._DocTreeView.get_selection().get_selected_rows()[1]
+		
+		iter=treeModel.get_iter(path[0])
+		resource= treeModel.get_value(iter,3)
+
+                #if this is a doc
+		if resource.GetResourceType()=='document':
+			file_dialog.set_current_name(resource.title.text+'.odt')
+		#if this is a spreadsheet
+		elif resource.GetResourceType()=='spreadsheet':
+			file_dialog.set_current_name(resource.title.text+'.ods')
+		#if this is a presentation
+		elif resource.GetResourceType()=='presentation':
+			file_dialog.set_current_name(resource.title.text+'.ppt')
+		
+
+                
 
                 result = ""
 		if file_dialog.run() == gtk.ResponseType.OK:
