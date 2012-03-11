@@ -186,6 +186,17 @@ class GDActionsManager():
         
         client.DownloadResource(entry,path)
 
+    def download_spreadsheet(self, path,entry,format):
+        """Downloads the given spreadsheet
+    
+    Arguments:
+    - `path`:String-path to download the spreadsheet
+    - `entry`:String - Resource
+    - `format`:String- format to be downloaded
+    """
+        client=self.__create_client()
+        client.DownloadResource(entry,path,extra_params={'gid': 0, 'exportFormat': format})
+
     def upload_new_doc(self, path,col,doc_title):
         """Uploads a new document to Google Docs
         
