@@ -5,6 +5,12 @@ import Authentication
 import os
 from gi.repository import Gtk as gtk
 from gi.repository import GObject as gobject
+from gi.repository import Notify as pynotify
+# try:
+	
+# 	import pynotify
+# except:
+# 	pass
 
 # try:
 #  	import pygtk
@@ -397,6 +403,13 @@ class ImportGDocsWindow():
                 DocList=gtk.ListStore(str,str,str,gobject.TYPE_PYOBJECT)
 		self._DocTreeView.set_model(DocList)
 
+                #notifications
+		notified=False
+                if pynotify.init("Gnome Google Documents Manager"):
+			n = pynotify.Notification.new("Gnome Google Documents Manager", "\n Your Google Documents list is being downloaded. Please wait.","dialog-information")
+			#n.set_timeout()
+			n.show()
+			notified=True
 		
 		
 		for doc in self._gdam.get_all_documents().entry:
@@ -424,8 +437,11 @@ class ImportGDocsWindow():
 			#itr=DocList.append([1,'2','3'])
 		#DocList.insert_after(itr,[2,"2",'2'])
 		#DocList.append(["1","2","3","R_ID"])
-		
 
+                #If a notification has been raised
+		if notified:
+			n.close()
+		
                 cell = gtk.CellRendererText()
 		col_type.pack_start(cell,False)
 		col_type.add_attribute(cell,"text",0)
