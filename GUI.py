@@ -479,10 +479,15 @@ class ImportGDocsWindow():
 		#print path[0]
 		iter=treeModel.get_iter(path[0])
 		resource= treeModel.get_value(iter,3)
-		
+
+                #if this is a doc
+		if resource.GetResourceType()=='document':
+			self._gdam.download_doc(resource,filePath)
+		elif resource.GetResourceType()=='spreadsheet':
+			self._gdam.download_spreadsheet(filePath,resource,'xls')
                 
 		
-		self._gdam.download_doc(resource,filePath)
+		
 
 	def on_save_n_open_button(self, arg1):
 		"""Saves the given doc and opens it in Libre office
