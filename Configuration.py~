@@ -1,6 +1,9 @@
+from gi.repository import Gio
 import Authentication
 import os
 import ConfigParser
+
+
 
 class ConfigurationManager():
     """Provides an interface to access and configure the extension settings
@@ -9,19 +12,37 @@ class ConfigurationManager():
     def __init__(self):
         """
         """
+
+        #TODO: Currently in this class the way to persist acounts and
+        #the way to handle their usage status is very primitive. Need
+        #to improve this.
+        #ex:
+        #Bad method- set_persist_active()
+        
         self._am=Authentication.AccountManager()
         
         self._scp=ConfigParser.SafeConfigParser()
 
+       #config file to read
        
-        self._scp.read('settings.cfg')
+       ##TODO:
+       #Place this file in home (~/.settings.cfg)
+        self._scp.read('/home/ishan/4sep/settings.cfg')
+
+        #Currently set account
+        self._account=None
+
+        if self._scp.get('acc_info','has_default')=="True":
+            accountName=self._scp.get('acc_info','account')
+
+            self._account=self._am.get_accounts()[accountName]
+        
         
 
-    def get_account(self):
-        """Returns the current selected account
+    def get_persisted_account(self):
+        """Returns the current persisted selected account
         """
-        #TODO: Properly implement the functionality to get the 
-        #account from a persistence location
+       
 
         #check whether the user has selected a default account
         if self._scp.get('acc_info','has_default')=="True":
@@ -30,7 +51,54 @@ class ConfigurationManager():
             return self._am.get_accounts()[accountName]
         
         
-        return account
+        return None
+
+    def set_persisted_account(self, account):
+        """Sets the persisted account
+        
+        Arguments:
+        - `account`:Authentication.Account
+        """
+        
+        self._scp.set('acc_info','account',account.get_email())
+        
+                
+        # Writing our configuration file
+        with open('settings.cfg', 'wb') as configfile:
+            self._scp.write(configfile)
+
+    def set_persist_active(self):
+        """Mark the persisted account as active
+        """
+        self._scp.set('acc_info','has_default','True')
+        
+                
+        # Writing our configuration file
+        with open('settings.cfg', 'wb') as configfile:
+            self._scp.write(configfile)
+
+    def get_persist_active(self):
+        """Returns whether the persisted account is marked as active or not 
+        """
+        if self._scp.get('acc_info','has_default')=='True':
+            return True
+        else:
+            return False
+
+    def get_account(self):
+        """Returns the current selected account
+        """
+        
+        return self._account
+
+    def set_account(self, account):
+        """Sets the current Account
+        
+        Arguments:
+        - `account`:Authentication.Account
+        """
+        self._account=account
+        
 
     def get_system_path(self):
         """Returns the path of the place where the python scripts are
@@ -38,7 +106,7 @@ class ConfigurationManager():
         
         return os.path.expanduser('~')+"/"+self._scp.get("file_path","path")
 
-    def set_proxy(self, url,port):
+    def set_proxy(self, http,https):
         """
         Sets proxy for the environment of the script
         
@@ -47,12 +115,18 @@ class ConfigurationManager():
         - `port`:port of the proxy server
         """
         #Set the proxy only if valid arguments are passed
-        if url and port:
+        if http and https:
         
-            os.environ['http_proxy']=url+":"+port
-            os.environ['https_proxy']=url+":"+port
+            os.environ['http_proxy']=http
+            os.environ['https_proxy']=https
 
-    def get_proxy(self, ):
+
+        elif not http and not https:
+            os.environ['http_proxy']=''
+            os.environ['https_proxy']=''
+            
+       
+    def get_proxy(self):
         """Returns the proxy settings as an array 
         Array[0]=http proxy settings
         Array[1]=https proxy settings
@@ -102,7 +176,7 @@ class ConfigurationManager():
         #     username = password = None
         return [mode,http_host+":"+http_port,https_host+":"+https_port]   
 
-    def persist_proxy(self, http_url,http_port,https_url,https_port):
+    def persist_proxy(self, http,https):
         """
         
         Arguments:
@@ -112,12 +186,38 @@ class ConfigurationManager():
         - `https_port`:
         """
 
+        ##TODO: Add code to remove extra http or https text
+        ##ex:
+        ##http://http://www.cache.mrt.ac.lk
        
         #self._cp.add_section('proxy_data')
-        self._scp.set('proxy_data','http',http_url+':'+http_port)
-        self._scp.set('proxy_data','https',https_url+':'+https_port)
+        self._scp.set('proxy_data','http',http)
+        self._scp.set('proxy_data','https',https)
                 
         # Writing our configuration file
         with open('settings.cfg', 'wb') as configfile:
             self._scp.write(configfile)
         
+    def set_proxy_type(self, type):
+        """Persists the type of proxy that needs to be used
+    
+    Arguments:
+    - `type`:String - none, file, system
+    """
+        self._scp.set('proxy_data','get_from',type)
+
+        # Writing our configuration file
+        with open('settings.cfg', 'wb') as configfile:
+            self._scp.write(configfile)
+
+    def get_persited_proxy(self):
+        """Returns the persisted proxy settings
+        """
+        http_proxy=self._scp.get("proxy_data","http")
+        https_proxy=self._scp.get("proxy_data","https")
+        return [http_proxy,https_proxy]
+
+    def get_proxy_from(self):
+        """Returns from where the proxy settings are retrieved
+        """
+        return self._scp.get("proxy_data","get_from")

@@ -24,7 +24,10 @@ class ConfigurationManager():
         self._scp=ConfigParser.SafeConfigParser()
 
        #config file to read
-        self._scp.read('settings.cfg')
+       
+       ##TODO:
+       #Place this file in home (~/.settings.cfg)
+        self._scp.read('/home/ishan/4sep/settings.cfg')
 
         #Currently set account
         self._account=None
@@ -61,7 +64,8 @@ class ConfigurationManager():
         
                 
         # Writing our configuration file
-        with open('settings.cfg', 'wb') as configfile:
+        #TODO - Correct file path
+        with open('/home/ishan/4sep/settings.cfg', 'wb') as configfile:
             self._scp.write(configfile)
 
     def set_persist_active(self):
@@ -71,7 +75,8 @@ class ConfigurationManager():
         
                 
         # Writing our configuration file
-        with open('settings.cfg', 'wb') as configfile:
+        #TODO - Correct file path
+        with open('/home/ishan/4sep/settings.cfg', 'wb') as configfile:
             self._scp.write(configfile)
 
     def get_persist_active(self):
@@ -192,7 +197,8 @@ class ConfigurationManager():
         self._scp.set('proxy_data','https',https)
                 
         # Writing our configuration file
-        with open('settings.cfg', 'wb') as configfile:
+        #TODO - properly implement the file path
+        with open('/home/ishan/4sep/settings.cfg', 'wb') as configfile:
             self._scp.write(configfile)
         
     def set_proxy_type(self, type):

@@ -1,12 +1,12 @@
 [proxy_data]
 get_from = file
-http = 6:5
+http = zz:5
 https = 7:8
 
 [file_path]
 path = 4sep/
 
 [acc_info]
-has_default = False
+has_default = True
 account = ishanthilina@gmail.com
 
