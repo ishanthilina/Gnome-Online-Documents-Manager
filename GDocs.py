@@ -143,10 +143,12 @@ class GDActionsManager():
         folderHierarchy=[]
 
         #iterate through the root folders
-        for rFolder in rootFolders:
+        for rFolder in rootFolders.entry:
             rf=FolderGraphNode(rFolder,self)
             folderHierarchy.append(rf)
-            
+            rf.add_children()
+
+        return folderHierarchy
 
         # #store all the folders to iterate
         # folders=[]
@@ -321,17 +323,18 @@ class FolderGraphNode():
     def __init__(self,folder,gdam):
         """folder: gdata.resource corresponding to a folder
         """
+        print folder.title.text
         self._folder=folder
         self._folderHierarchy=[]
         self._gdam=gdam
 
-    def get_folder_(self):
+    def get_folder(self):
         """Returns the gdata.entry folder corresponding to the node
         """
         return self._folder
         
-    def add_child(self, child):
-        """Adds a child to the node
+    def add_children(self):
+        """Adds children to the node 
     
     Arguments:
     - `child`: A folder node corresponding FolderGraphNode
@@ -340,6 +343,7 @@ class FolderGraphNode():
         childrenArray=[]
 
         #iterate through the children
-        for child in self._gdam.get_sub_folders(self._folder)
+        for child in self._gdam.get_sub_folders(self._folder).entry:
             childNode=FolderGraphNode(child,self._gdam)
-            childNode.add_child()
+            childrenArray.append(childNode)
+            childNode.add_children()

@@ -25,12 +25,12 @@ class GDClientManagerTester(unittest.TestCase):
 
        
 
-        
-        self._gdcManger=GDocs.GDClientManager()
+        self._confMan=Configuration.ConfigurationManager()
+        self._gdcManger=GDocs.GDClientManager(self._confMan)
         self._am=Authentication.AccountManager()
 
-        self._gdcm=GDocs.GDClientManager()
-        self._confMan=Configuration.ConfigurationManager()
+        self._gdcm=GDocs.GDClientManager(self._confMan)
+        
     
         
         
@@ -60,10 +60,12 @@ class GDActionsManagerTester(unittest.TestCase):
         import GDocs
         import Configuration
         import gdata.docs.client
-        self._am=Authentication.AccountManager()
-        self._gdcm=GDocs.GDClientManager()
-        self._gdam=GDocs.GDActionsManager(self._gdcm)
+
         self._confMan=Configuration.ConfigurationManager()
+        self._am=Authentication.AccountManager()
+        self._gdcm=GDocs.GDClientManager(self._confMan)
+        self._gdam=GDocs.GDActionsManager(self._gdcm)
+       
     
     def test_file_download(self):
         """Tests the file download functionality
@@ -118,8 +120,10 @@ class GDActionsManagerTester(unittest.TestCase):
     """
         account=self._confMan.get_account()
         self._gdcm.authenticate_client(account)
-        
-        self._gdam.get_folder_hierarchy()
+
+        print 'in test method'
+        for entry in  self._gdam.get_folder_hierarchy():
+            print entry.get_folder().title.text
         
         
 #test suite
