@@ -119,8 +119,8 @@ class ConfigurationManager():
         #Set the proxy only if valid arguments are passed
         if http and https:
         
-            os.environ['http_proxy']=http
-            os.environ['https_proxy']=https
+            os.environ['http_proxy']='http://'+http
+            os.environ['https_proxy']='https://'+https
 
 
         elif not http and not https:
@@ -134,18 +134,20 @@ class ConfigurationManager():
         Array[1]=https proxy settings
         """
         #find out from where to get the proxy settings
-        get_proxy_from=self._scp.get("proxy_data","get_from")
+        get_proxy_from=str(self._scp.get("proxy_data","get_from"))
 
         #act accordingly
-
+        
         #get proxy settings from system
         if get_proxy_from=='system':
+            
             proxyData=self.__get_sytem_proxy_settings()
             mode=proxyData[0]
-            http_proxy=proxyData[1]
-            https_proxy=proxyData[2]
+            http_proxy=str(proxyData[1])
+            https_proxy=str(proxyData[2])
             #if the system has manually/automatically set the proxy settings
             if mode!='none':
+                
                 return [http_proxy,https_proxy]
             #if the system uses a direct connection
             else:

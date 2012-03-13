@@ -43,7 +43,10 @@ class GDClientManager():
         except gdata.client.Error:
             exit('Login Error')
 
-        self._confMan.set_proxy(self._confMan.get_proxy()[0],self._confMan.get_proxy()[1])
+        http_proxy=self._confMan.get_proxy()[0]
+        https_proxy=self._confMan.get_proxy()[1]
+       
+        self._confMan.set_proxy(http_proxy,https_proxy)
         self._is_Authenticated=True
 
     def get_client(self):
@@ -136,26 +139,35 @@ class GDActionsManager():
         #Get the folders in root
         rootFolders=client.GetResources('https://docs.google.com/feeds/default/private/full/folder%3Aroot/contents/-/folder')
 
-        #store all the folders to iterate
-        folders=[]
-        #to store the folder structure
-        folStruct=[]
-        #print rootFolders
-        ##What happens if there are no sub folders...?
-        for folder in rootFolders.entry:
-            # print self.get_doc_data(folder)
-            folders.append(folder)
+        #an array to store the root folders with the hierarchy
+        folderHierarchy=[]
 
-        #iterate through all the folders
-        #for folder in folders:
-            #subFolders=self.get_sub_folders(folder)
-            #   print folder.title.text
+        #iterate through the root folders
+        for rFolder in rootFolders:
+            rf=FolderGraphNode(rFolder,self)
+            folderHierarchy.append(rf)
+            
 
-            #add the sub folders to the list
-            #            for subF in subFolders.entry:
-            #   print subF.title.text
+        # #store all the folders to iterate
+        # folders=[]
+        # #to store the folder structure
+        # folStruct=[]
+        # #print rootFolders
+        # ##What happens if there are no sub folders...?
+        # for folder in rootFolders.entry:
+        #     # print self.get_doc_data(folder)
+        #     folders.append(folder)
+
+        # #iterate through all the folders
+        # #for folder in folders:
+        #     #subFolders=self.get_sub_folders(folder)
+        #     #   print folder.title.text
+
+        #     #add the sub folders to the list
+        #     #            for subF in subFolders.entry:
+        #     #   print subF.title.text
         
-        return folders
+        # return folders
         
         
 
@@ -302,3 +314,32 @@ class GDActionsManager():
         return [entry.GetResourceType(),entry.title.text,entry.resource_id.text]
 
 
+class FolderGraphNode():
+    """A class to setup the folder hierarchy
+    """
+    
+    def __init__(self,folder,gdam):
+        """folder: gdata.resource corresponding to a folder
+        """
+        self._folder=folder
+        self._folderHierarchy=[]
+        self._gdam=gdam
+
+    def get_folder_(self):
+        """Returns the gdata.entry folder corresponding to the node
+        """
+        return self._folder
+        
+    def add_child(self, child):
+        """Adds a child to the node
+    
+    Arguments:
+    - `child`: A folder node corresponding FolderGraphNode
+    """
+        #the array to store the children nodes
+        childrenArray=[]
+
+        #iterate through the children
+        for child in self._gdam.get_sub_folders(self._folder)
+            childNode=FolderGraphNode(child,self._gdam)
+            childNode.add_child()
