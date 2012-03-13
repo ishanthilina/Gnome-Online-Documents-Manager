@@ -309,19 +309,66 @@ class ExportGDocsWindow():
 		self._FolderTreeView.set_model(self._folderList)
 
                 #add folder data
-		folders=self._gdam.get_folder_hierarchy()
+		fHierarchy=self._gdam.get_folder_hierarchy()
 
-                for folder in folders:
-			print folder.title.text
-			self._folderList.append(None,(folder.title.text,None,folder))
+                parent=None
+                for folder in fHierarchy:
+
+                        # # #Set the parent to None so that root folders parents 
+			# # #are None
+			# # parent=None
+			# # #add the root folders
+                        # # parentNode=self._folderList.append(parent,(folder.get_folder().title.text,None,folder.get_folder()))
+			# # #add the child folders
+			# # self.add_children_to_list(folder,parentNode)
+			# # #self._folderList.append(None,(folder.title.text,None,folder))
+
+			##new way to Create the folder hierarchy
+                        
+			#array to store the items linearly
+			folderList=[]
+			#add the root folder
+                        folderList.append([None,folder])
+
+                        #set the parent to null
+			parentNode=None
+			#add it to the GUI list
 			
-			#p= FolderList.append(None, ('1',None))
-			#	FolderList.append(p, ('2',None))
+			
 
-                cell = gtk.CellRendererText()
+			while len(folderList)>0:
+				#get the next element in the folderList
+				child=folderList.pop(0)
+				#add the item to GUI
+				parentNode=self._folderList.append(parentNode,(child[1].get_folder().title.text,None,child[1].get_folder()))
+				#iterate through its children and add them to folderList
+				for entry in child[1].get_children():
+					folderList.append([parentNode,entry])
+					 
+			
+		
+		
+
+		
+                
+		cell = gtk.CellRendererText()
 		cell.set_property( 'editable', True )
 		col_select.pack_start(cell,False)
 		col_select.add_attribute(cell,"text",0)
+
+	def add_children_to_list(self, folder,parent):
+		"""Adds a folder to the GUI ListStore
+    
+		Arguments:
+		- `folder`: folder that should be added to the list
+		- `parent`: gui parent of that folder
+		"""
+		#add each child to the tree
+		for child in folder.get_children():
+			parentNode=self._folderList.append(parent,(child.get_folder().title.text,None,child.get_folder()))
+			#add the children of this folder
+			#self.add_children_to_list(folder,parentNode)
+                
 
 	def upload(self):
 		"""Upload a doc to Google docs upon GUI call

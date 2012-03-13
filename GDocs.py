@@ -328,10 +328,18 @@ class FolderGraphNode():
         self._folderHierarchy=[]
         self._gdam=gdam
 
+        #the array to store the children nodes
+        self._childrenArray=[]
+
     def get_folder(self):
         """Returns the gdata.entry folder corresponding to the node
         """
         return self._folder
+
+    def get_children(self):
+        """Return the child list
+        """
+        return self._childrenArray
         
     def add_children(self):
         """Adds children to the node 
@@ -339,11 +347,10 @@ class FolderGraphNode():
     Arguments:
     - `child`: A folder node corresponding FolderGraphNode
     """
-        #the array to store the children nodes
-        childrenArray=[]
+        
 
         #iterate through the children
         for child in self._gdam.get_sub_folders(self._folder).entry:
             childNode=FolderGraphNode(child,self._gdam)
-            childrenArray.append(childNode)
+            self._childrenArray.append(childNode)
             childNode.add_children()
