@@ -285,6 +285,16 @@ class GDActionsManager():
             
         """
         print 'Doc type:', entry.GetResourceType()
+
+    def copy_resource_to_collection(self, collection,resource):
+        """Copies the given resource to the given collection
+    
+        Arguments:
+        - `collection`: a gdata.resource representing a folder/collection
+        - `resource`:a gdata.resource representing a file
+        """
+        client=self.__create_client()
+        client.MoveResource(resource,collection,keep_in_collections=True)
         
 
     def get_doc_data(self, entry):

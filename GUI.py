@@ -325,20 +325,11 @@ class ExportGDocsWindow():
 
                 #add folder data
 		fHierarchy=self._gdam.get_folder_hierarchy()
-
+		
                 parent=None
                 for folder in fHierarchy:
 
-                        # # #Set the parent to None so that root folders parents 
-			# # #are None
-			# # parent=None
-			# # #add the root folders
-                        # # parentNode=self._folderList.append(parent,(folder.get_folder().title.text,None,folder.get_folder()))
-			# # #add the child folders
-			# # self.add_children_to_list(folder,parentNode)
-			# # #self._folderList.append(None,(folder.title.text,None,folder))
-
-			##new way to Create the folder hierarchy
+                       
                         
 			#array to store the items linearly
 			folderList=[]
@@ -388,13 +379,17 @@ class ExportGDocsWindow():
 	def upload(self,arg1):
 		"""Upload a doc to Google docs upon GUI call
 		"""
-		#TODO: Add multi folder support
+		
 		folders=self.get_selected_folders()
 
+                
+
                 #upload to the first selected folder
-		self._gdam.upload_new_doc(self._filePath,folders.pop(0),self._tbUploadName.get_text())
-		
-	
+		doc=self._gdam.upload_new_doc(self._filePath,None,self._tbUploadName.get_text())
+
+                #copy to the other resources
+		for folder in folders:
+			self._gdam.copy_resource_to_collection(folder,doc)
 		
 		
                 
@@ -405,20 +400,62 @@ class ExportGDocsWindow():
 		
 
 		model[path][1] = not model[path][1]
+		
 
 		return
+
+        def _add_children(self, iter,results):
+		"""Adds the children of the iterator entry 
+		
+		Arguments:
+		- `iter`: an iterator
+		-`results`: an array to store the results
+		"""
+
+               
+		
+
+                #check whether this entry is selected
+		if self._folderList[iter][1]:
+			results.append(self._folderList[iter][2])
+			
+				
+		#if this entry has children
+		if self._folderList.iter_has_child(iter):
+			self._add_children(self._folderList.iter_children(iter),results)
+		
+		
 	
 	def get_selected_folders(self):
 		"""Returns the selected folders as a list
 		"""
+		#to store the selected items
 		selected=[]
-
-                for folder in self._folderList:
 		
-			if  folder[1]:
-				selected.append(folder[2])
+		
+                rootIter=self._folderList.get_iter_first()
+		#	path=self._folderList.get_path(iter)
+
+
+                
+                while rootIter!=None:
+			#if the entry has been selected
+			if  self._folderList[rootIter][1]:
+				selected.append(self._folderList[rootIter][2])
+				
+
+			#check for selected children
+			if self._folderList.iter_has_child(rootIter):
+				
+				self._add_children(self._folderList.iter_children(rootIter),selected)
+                                
+			#select the next entry
+			rootIter=self._folderList.iter_next(rootIter)	
+
+               
 			
 
+                
 		return selected
 
 	def destroy_all(self,arg):
