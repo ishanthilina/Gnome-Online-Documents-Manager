@@ -47,11 +47,11 @@ class GUIManager():
                 window=ImportGDocsWindow(self._gdam,self._confMan)
 		#window=MainWindow()
 
-	def show_export_window(self,filePath,fileName):
+	def show_export_window(self,filePath):
 		"""Shows the export Documents window
 		"""
 		
-		window=ExportGDocsWindow(self._gdam,self._confMan,filePath,fileName)
+		window=ExportGDocsWindow(self._gdam,self._confMan,filePath)
 
 	def show_settings_window(self):
 		"""Shows the settings window
@@ -267,7 +267,7 @@ class ExportGDocsWindow():
 	"""Shows the export  Google Docs windows
 	"""
 	
-	def __init__(self, gdam,confMan,filePath,fileName):
+	def __init__(self, gdam,confMan,filePath):
 		"""
 		
                 Arguments:
@@ -276,6 +276,10 @@ class ExportGDocsWindow():
                 """
 		self._gdam = gdam
 		self._confMan=confMan
+		#set the file path properly
+		self._filePath=filePath[7:]
+		
+		
 
                 if filePath=='':
 			self.show_error_dlg('Save the file before uploading')
@@ -291,7 +295,10 @@ class ExportGDocsWindow():
 		
 		self._FolderTreeView=builder.get_object('FolderTreeView')
 		self._tbUploadName=builder.get_object('uploadName')
-		self._tbUploadName.set_text(filePath)
+
+                #get the file name from the file path
+		fName=filePath.split('.')[-2].split('/')[-1]+'.'+filePath.split('.')[-1]
+		self._tbUploadName.set_text(fName)
 
 		col_name=gtk.TreeViewColumn('')
 		col_name.set_resizable(True)
@@ -313,7 +320,8 @@ class ExportGDocsWindow():
 
 		
 	
-		self._FolderTreeView.set_model(self._folderList)
+
+                self._FolderTreeView.set_model(self._folderList)
 
                 #add folder data
 		fHierarchy=self._gdam.get_folder_hierarchy()
@@ -377,11 +385,16 @@ class ExportGDocsWindow():
 			#self.add_children_to_list(folder,parentNode)
                 
 
-	def upload(self):
+	def upload(self,arg1):
 		"""Upload a doc to Google docs upon GUI call
 		"""
 		#TODO: Add multi folder support
 		folders=self.get_selected_folders()
+
+                #upload to the first selected folder
+		self._gdam.upload_new_doc(self._filePath,folders.pop(0),self._tbUploadName.get_text())
+		
+	
 		
 		
                 
@@ -698,8 +711,8 @@ if __name__ == "__main__":
 		elif( sys.argv[1] == 'export' ):
 
 		        filePath=sys.argv[2]
-			fileName=sys.argv[3]
-	        	guiM.show_export_window(filePath,fileName)
+			
+	        	guiM.show_export_window(filePath)
 
 		elif( sys.argv[1] == 'settings' ):
 
