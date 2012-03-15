@@ -47,10 +47,11 @@ class GUIManager():
                 window=ImportGDocsWindow(self._gdam,self._confMan)
 		#window=MainWindow()
 
-	def show_export_window(self):
+	def show_export_window(self,filePath,fileName):
 		"""Shows the export Documents window
 		"""
-		window=ExportGDocsWindow(self._gdam,self._confMan)
+		
+		window=ExportGDocsWindow(self._gdam,self._confMan,filePath,fileName)
 
 	def show_settings_window(self):
 		"""Shows the settings window
@@ -266,7 +267,7 @@ class ExportGDocsWindow():
 	"""Shows the export  Google Docs windows
 	"""
 	
-	def __init__(self, gdam,confMan):
+	def __init__(self, gdam,confMan,filePath,fileName):
 		"""
 		
                 Arguments:
@@ -275,6 +276,10 @@ class ExportGDocsWindow():
                 """
 		self._gdam = gdam
 		self._confMan=confMan
+
+                if filePath=='':
+			self.show_error_dlg('Save the file before uploading')
+			sys.exit()
 
                 #load and setup the GUI components
 
@@ -285,6 +290,8 @@ class ExportGDocsWindow():
 		builder.connect_signals(self)
 		
 		self._FolderTreeView=builder.get_object('FolderTreeView')
+		self._tbUploadName=builder.get_object('uploadName')
+		self._tbUploadName.set_text(filePath)
 
 		col_name=gtk.TreeViewColumn('')
 		col_name.set_resizable(True)
@@ -405,6 +412,18 @@ class ExportGDocsWindow():
 		"""Destroy everything
 		"""
 		gtk.main_quit()
+
+	def show_error_dlg(self, error_string):
+		"""This Function is used to show an error dialog when
+		an error occurs.
+		error_string - The error string that will be displayed
+		on the dialog.
+		"""
+		error_dlg = gtk.MessageDialog(type=gtk.MessageType.ERROR
+					      , message_format=error_string
+					      , buttons=gtk.ButtonsType.OK)
+		error_dlg.run()
+		error_dlg.destroy()
 
 		
 class ImportGDocsWindow():
@@ -678,8 +697,9 @@ if __name__ == "__main__":
 		
 		elif( sys.argv[1] == 'export' ):
 
-		        
-	        	guiM.show_export_window()
+		        filePath=sys.argv[2]
+			fileName=sys.argv[3]
+	        	guiM.show_export_window(filePath,fileName)
 
 		elif( sys.argv[1] == 'settings' ):
 
