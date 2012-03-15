@@ -3,6 +3,7 @@ import GDocs
 import Configuration
 import Authentication
 import os
+import subprocess
 from gi.repository import Gtk as gtk
 from gi.repository import GObject as gobject
 from gi.repository import Notify as pynotify
@@ -596,15 +597,15 @@ class ImportGDocsWindow():
 				, action=gtk.FileChooserAction.SAVE
 				, buttons=dialog_buttons)
 
-                filter = gtk.FileFilter()
-		filter.set_name("*.odt")
-		filter.add_pattern("*.odt")
-		file_dialog.add_filter(filter)
+                # filter = gtk.FileFilter()
+		# filter.set_name("*.odt")
+		# filter.add_pattern("*.odt")
+		# file_dialog.add_filter(filter)
 
-                filter = gtk.FileFilter()
-		filter.set_name("*.doc")
-		filter.add_pattern("*.doc")
-		file_dialog.add_filter(filter)
+                # filter = gtk.FileFilter()
+		# filter.set_name("*.doc")
+		# filter.add_pattern("*.doc")
+		# file_dialog.add_filter(filter)
 
 		##set the default name
 		treeModel=self._DocTreeView.get_selection().get_selected_rows()[0]
@@ -695,7 +696,9 @@ class ImportGDocsWindow():
 			self.show_error_dlg("File path is empty")
 			return
 		self.on_save_button(arg1)
-		os.system("soffice "+self._entry_fileSaveLocation.get_text())
+
+		subprocess.Popen(['soffice', self._entry_fileSaveLocation.get_text()])
+		#os.system("soffice "+self._entry_fileSaveLocation.get_text())
 		self.destroy_all(None)
 
 	def show_error_dlg(self, error_string):
