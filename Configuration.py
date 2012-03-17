@@ -213,7 +213,7 @@ class ConfigurationManager():
         self._scp.set('proxy_data','get_from',type)
 
         # Writing our configuration file
-        with open('settings.cfg', 'wb') as configfile:
+        with open('/home/ishan/4sep/settings.cfg', 'wb') as configfile:
             self._scp.write(configfile)
 
     def get_persited_proxy(self):
