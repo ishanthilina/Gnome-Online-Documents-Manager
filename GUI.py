@@ -678,10 +678,10 @@ class ImportGDocsWindow():
 		elif resource.GetResourceType()=='presentation':
 
                         #if the extension matches
-			if ext in ['ppt']:
+			if ext in ['ppt','pptx']:
 				self._gdam.download_spreadsheet(filePath,resource,ext)
 			else:
-				self.show_error_dlg('Wrong file type. Supported file types include ppt')
+				self.show_error_dlg('Wrong file type. Supported file types include pptx')
 		
 		
 

@@ -85,7 +85,7 @@ class GDActionsManager():
         """Get and display all resources, using pagination."""
         client=self.__create_client()
 
-        feed = client.GetResources()
+        feed = client.GetResources('https://docs.google.com/feeds/default/private/full/-/-document/')
 
 
         for entry in feed.entry:

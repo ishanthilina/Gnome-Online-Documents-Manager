@@ -118,7 +118,8 @@ class ConfigurationManager():
         """
         #Set the proxy only if valid arguments are passed
         if http and https:
-        
+
+            
             os.environ['http_proxy']='http://'+http
             os.environ['https_proxy']='https://'+https
 
