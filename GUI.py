@@ -304,6 +304,8 @@ class ExportGDocsWindow():
 		builder.connect_signals(self)
 		
 		self._FolderTreeView=builder.get_object('FolderTreeView')
+		
+		#self._FolderTreeView.
 		self._tbUploadName=builder.get_object('uploadName')
 
                 #get the file name from the file path
@@ -314,20 +316,27 @@ class ExportGDocsWindow():
 		col_name.set_resizable(True)
 		self._FolderTreeView.append_column(col_name)
 
-                self._folderList=gtk.TreeStore( gobject.TYPE_STRING,
-                                         gobject.TYPE_BOOLEAN,gobject.TYPE_PYOBJECT )
-
+		self._folderList=gtk.TreeStore( gobject.TYPE_STRING,gobject.TYPE_BOOLEAN,gobject.TYPE_PYOBJECT )
+		#self._folderList=gtk.TreeStore( gobject.TYPE_BOOLEAN,gobject.TYPE_STRING,gobject.TYPE_PYOBJECT )
                 renderer=gtk.CellRendererToggle()
 		renderer.set_property('activatable', True)
+		#renderer.set_property('width',20)
 		renderer.connect( 'toggled', self.col1_toggled_cb, self._folderList )
 		#renderer.set_sensitive(True)
 
-                col_select=gtk.TreeViewColumn('Folder Name',renderer)
-		col_select.add_attribute(renderer, "active", 1)
+                colFolder=gtk.TreeViewColumn('Folder Name',renderer)
+		colFolder.add_attribute(renderer, "active", 1)
 	
-		col_select.set_resizable(True)
-		self._FolderTreeView.append_column(col_select)
+		colFolder.set_resizable(True)
+		self._FolderTreeView.append_column(colFolder)
 
+                #notifications
+		notified=False
+                if pynotify.init("Gnome Google Documents Manager"):
+			n = pynotify.Notification.new("Gnome Google Documents Manager", "\n Your Google Documents folders list is being retrieved. Please wait.","dialog-information")
+			#n.set_timeout()
+			n.show()
+			notified=True
 		
 	
 
@@ -357,6 +366,7 @@ class ExportGDocsWindow():
 				child=folderList.pop(0)
 				#add the item to GUI
 				parentNode=self._folderList.append(parentNode,(child[1].get_folder().title.text,None,child[1].get_folder()))
+				#parentNode=self._folderList.append(parentNode,(child[1].get_folder(),None,child[1].get_folder().title.text))
 				#iterate through its children and add them to folderList
 				for entry in child[1].get_children():
 					folderList.append([parentNode,entry])
@@ -365,12 +375,15 @@ class ExportGDocsWindow():
 		
 		
 
-		
+		#If a notification has been raised
+		if notified:
+			n.close()
                 
 		cell = gtk.CellRendererText()
 		cell.set_property( 'editable', True )
-		col_select.pack_start(cell,False)
-		col_select.add_attribute(cell,"text",0)
+		#cell.set_property('height',20)
+		colFolder.pack_start(cell,False)
+		colFolder.add_attribute(cell,"text",0)
 
 	def add_children_to_list(self, folder,parent):
 		"""Adds a folder to the GUI ListStore
