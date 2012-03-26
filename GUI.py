@@ -182,6 +182,15 @@ class SettingsWindow():
 		self._accountsList.set_sensitive(True)
 		self._cbRememberAcc.set_sensitive(True)
 
+	def ok_but_clicked(self, args):
+		"""Action handler for the Ok button
+    
+		Arguments:
+		- `args`:
+		"""
+		self.apply_but_clicked(args)
+		self.destroy_all(args)
+
 	def apply_but_clicked(self, args):
 		"""
 		
