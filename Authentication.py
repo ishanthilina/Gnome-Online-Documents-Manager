@@ -3,11 +3,12 @@ Author: Ishan Thilina Somasiri
 E-mail: ishan@ishans.info
 """
 
-import DBusConnector
 import re
-import uno
 
+import uno
 import unohelper
+
+import DBusConnector
 
 class Account():
     """A class to store account details

@@ -1,8 +1,8 @@
 from gi.repository import Gio
-import Authentication
 import os
 import ConfigParser
 
+import Authentication
 
 
 class ConfigurationManager():

@@ -1,12 +1,13 @@
 import sys
-import GDocs
-import Configuration
-import Authentication
 import os
 import subprocess
 from gi.repository import Gtk as gtk
 from gi.repository import GObject as gobject
 from gi.repository import Notify as pynotify
+
+import GDocs
+import Configuration
+import Authentication
 # try:
 	
 # 	import pynotify

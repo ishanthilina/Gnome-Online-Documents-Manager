@@ -5,8 +5,10 @@ E-mail: ishan@ishans.info
 
 
 import unittest
-import DBusConnector
 import dbus
+
+import DBusConnector
+
 
 class DBusConnectorTestCase(unittest.TestCase):
     """Tests the DBusConnector class methods

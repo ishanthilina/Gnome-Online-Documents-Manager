@@ -3,10 +3,12 @@ Author: Ishan Thilina Somasiri
 E-mail: ishan@ishans.info
 """
 
+import os
 
 import gdata.docs.client
+
 import MyExceptions
-import os
+
 
 class GDClientManager():
     """Handles the creation, authenitcation of GDocs clients
