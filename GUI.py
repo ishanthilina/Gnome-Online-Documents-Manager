@@ -291,7 +291,7 @@ class ExportGDocsWindow():
 		self._filePath=filePath[7:]
 		
 		
-
+		 
                 if filePath=='':
 			self.show_error_dlg('Save the file before uploading')
 			sys.exit()

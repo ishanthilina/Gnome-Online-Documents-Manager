@@ -32,15 +32,19 @@ class ConfigurationManager():
         #Currently set account
         self._account=None
 
+        #if there's a persisted setting to use a particular account
         if self._scp.get('acc_info','has_default')=="True":
             accountName=self._scp.get('acc_info','account')
 
-            self._account=self._am.get_accounts()[accountName]
+            #if the account is still available in DBus
+
+            if accountName in self._am.get_accounts():
+                self._account=self._am.get_accounts()[accountName]
         
         
 
     def get_persisted_account(self):
-        """Returns the current persisted selected account
+        """Returns the current (persisted) default account
         """
        
 
@@ -54,7 +58,7 @@ class ConfigurationManager():
         return None
 
     def set_persisted_account(self, account):
-        """Sets the persisted account
+        """Persists the default account
         
         Arguments:
         - `account`:Authentication.Account
