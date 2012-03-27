@@ -399,6 +399,7 @@ class ExportGDocsWindow():
 		colFolder.add_attribute(cell,"text",0)
 
 		self._mainWindow.get_root_window().set_cursor(Gdk.Cursor(Gdk.CursorType.ARROW))
+		
 	def add_children_to_list(self, folder,parent):
 		"""Adds a folder to the GUI ListStore
     
@@ -685,7 +686,7 @@ class ImportGDocsWindow():
 		#Set the curosr to busy
 		#time.sleep(10)
 		#print 'Hi'
-		self._mainWindow.get_root_window().set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
+		#self._mainWindow.get_root_window().set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
 		#self._mainWindow.set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
 		#print 'Chathu'
                 
@@ -722,6 +723,7 @@ class ImportGDocsWindow():
 		elif resource.GetResourceType()=='spreadsheet':
 			#if the extension matches
 			if ext in ['xls','ods']:
+				#TODO:deprecated method. replace with download_doc
 				self._gdam.download_spreadsheet(filePath,resource,ext)
 			else:
 				self.show_error_dlg('Wrong file type.Supported file types are xls,doc')
@@ -730,6 +732,7 @@ class ImportGDocsWindow():
 
                         #if the extension matches
 			if ext in ['ppt','pptx']:
+				#TODO:deprecated method. replace with download_doc
 				self._gdam.download_spreadsheet(filePath,resource,ext)
 			else:
 				self.show_error_dlg('Wrong file type. Supported file types include pptx')
@@ -765,27 +768,7 @@ class ImportGDocsWindow():
 		error_dlg.destroy()
 
 
-class Test(object):
-	"""
-    """
-	
-	def __init__(self):
-		"""
-        """
-	
-		filename = "/home/ishan/4sep/Test.glade"
-		builder = gtk.Builder()
-		builder.add_from_file(filename)
-		builder.connect_signals(self)
-		#builder.get_object('window1').hide()
 
-
-	
-	def destroy_all(self,arg):
-		"""Destroy everything
-		"""
-		gtk.main_quit()
-	
 
 
 

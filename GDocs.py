@@ -23,7 +23,7 @@ class GDClientManager():
         
         #Keep a boolean to verify whether the client has been authenticated or not
         self._is_Authenticated=False
-
+    #
     def authenticate_client(self, account):
         """Authenticates the GDocs client using the Account object passed to it
         
@@ -83,18 +83,8 @@ class GDActionsManager():
         return self._gdcManger.get_client()
 
 
-    #for testing purposes
-    def GetAllResourcesSample(self):
-        """Get and display all resources, using pagination."""
-        client=self.__create_client()
-
-        feed = client.GetResources('https://docs.google.com/feeds/default/private/full/-/-document/')
-
-
-        for entry in feed.entry:
-            self.download_doc(entry,'/home/ishan/','name')
-            break
-
+   
+    #
     def get_all_documents(self):
         """Get and display all resources, using pagination."""
         client=self.__create_client()
@@ -104,21 +94,21 @@ class GDActionsManager():
 
         return feed
        
-    def get_all_folders(self):
-        """Returns a list of all the folsers in the server
-        """
-        client=self.__create_client()
+    # def get_all_folders(self):
+    #     """Returns a list of all the folsers in the server
+    #     """
+    #     client=self.__create_client()
 
-        feed = client.GetResources(uri=gdata.docs.client.RESOURCE_FEED_URI+'?showfolders=true')
+    #     feed = client.GetResources(uri=gdata.docs.client.RESOURCE_FEED_URI+'?showfolders=true')
 
-        folders=[]
+    #     folders=[]
         
-        for entry in feed.entry:
-            if entry.GetResourceType()=='folder':
-                folders.append(entry)
+    #     for entry in feed.entry:
+    #         if entry.GetResourceType()=='folder':
+    #             folders.append(entry)
                 
 
-        return folders
+    #     return folders
 
     def get_sub_folders(self, entry):
         """Returns all the sub Folders
@@ -133,6 +123,7 @@ class GDActionsManager():
 
         return subFolders
 
+    ##
     #TODO: Implement the functionality correctly
     def get_folder_hierarchy(self):
         """Returns the folder hierarchy in Google Docs
@@ -175,7 +166,7 @@ class GDActionsManager():
         # return folders
         
         
-
+    ##
     def download_doc(self, entry,path,format):
         """Downloads a given entry to the path under a given name
         
@@ -203,7 +194,8 @@ class GDActionsManager():
         # print full_path
         
         client.DownloadResource(entry,path,extra_params={'exportFormat': format})
-
+    #TODO:deprecated method. replace with download_doc
+    
     def download_spreadsheet(self, path,entry,format):
         """Downloads the given spreadsheet
     
@@ -215,6 +207,7 @@ class GDActionsManager():
         client=self.__create_client()
         client.DownloadResource(entry,path,extra_params={'exportFormat': format})
 
+    ##    
     def upload_new_doc(self, path,col,doc_title):
         """Uploads a new document to Google Docs
         
@@ -289,6 +282,7 @@ class GDActionsManager():
         """
         print 'Doc type:', entry.GetResourceType()
 
+    ##
     def copy_resource_to_collection(self, collection,resource):
         """Copies the given resource to the given collection
     
@@ -299,7 +293,7 @@ class GDActionsManager():
         client=self.__create_client()
         client.MoveResource(resource,collection,keep_in_collections=True)
         
-
+    ##
     def get_doc_data(self, entry):
         """Provides metadata on a given resource
         
