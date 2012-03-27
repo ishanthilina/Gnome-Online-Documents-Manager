@@ -179,7 +179,7 @@ class GDActionsManager():
         client=self.__create_client()
 
         #type of the document
-        doc_type=None
+        #doc_type=None
 
         #deterimine the document type
         #TODO- Edit the logic of the code to allow the user to modify the extension
@@ -196,16 +196,16 @@ class GDActionsManager():
         client.DownloadResource(entry,path,extra_params={'exportFormat': format})
     #TODO:deprecated method. replace with download_doc
     
-    def download_spreadsheet(self, path,entry,format):
-        """Downloads the given spreadsheet
+    # def download_spreadsheet(self, path,entry,format):
+    #     """Downloads the given spreadsheet
     
-    Arguments:
-    - `path`:String-path to download the spreadsheet
-    - `entry`:String - Resource
-    - `format`:String- format to be downloaded
-    """
-        client=self.__create_client()
-        client.DownloadResource(entry,path,extra_params={'exportFormat': format})
+    # Arguments:
+    # - `path`:String-path to download the spreadsheet
+    # - `entry`:String - Resource
+    # - `format`:String- format to be downloaded
+    # """
+    #     client=self.__create_client()
+    #     client.DownloadResource(entry,path,extra_params={'exportFormat': format})
 
     ##    
     def upload_new_doc(self, path,col,doc_title):

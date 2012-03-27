@@ -724,7 +724,7 @@ class ImportGDocsWindow():
 			#if the extension matches
 			if ext in ['xls','ods']:
 				#TODO:deprecated method. replace with download_doc
-				self._gdam.download_spreadsheet(filePath,resource,ext)
+				self._gdam.download_doc(resource,filePath,ext)
 			else:
 				self.show_error_dlg('Wrong file type.Supported file types are xls,doc')
 		#if this is a presentation
@@ -733,7 +733,7 @@ class ImportGDocsWindow():
                         #if the extension matches
 			if ext in ['ppt','pptx']:
 				#TODO:deprecated method. replace with download_doc
-				self._gdam.download_spreadsheet(filePath,resource,ext)
+				self._gdam.download_doc(resource,filePath,ext)
 			else:
 				self.show_error_dlg('Wrong file type. Supported file types include pptx')
 		
