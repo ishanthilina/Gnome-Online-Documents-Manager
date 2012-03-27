@@ -344,7 +344,7 @@ class ExportGDocsWindow():
 		notified=False
                 if pynotify.init("Gnome Google Documents Manager"):
 			n = pynotify.Notification.new("Gnome Google Documents Manager", "\n Your Google Documents folders list is being retrieved. Please wait.","dialog-information")
-			#n.set_timeout()
+			n.set_timeout(5)
 			n.show()
 			notified=True
 		
@@ -538,11 +538,17 @@ class ImportGDocsWindow():
 		builder = gtk.Builder()
 		builder.add_from_file(filename)
 		builder.connect_signals(self)
-		
+
+                #get widgets from the glade file
 		self._DocTreeView=builder.get_object('DocTreeView')
 		self._entry_fileSaveLocation=builder.get_object('fileSaveLocation')
 		self._mainWindow=builder.get_object('mainWindow')
+		self._cbListDocs=builder.get_object('cbListDocs')
+		self._cbListSpreadsheets=builder.get_object('cbListSpreadsheets')
+		self._cbListPresentations=builder.get_object('cbListPresentations')
 
+                #set window size
+		self._mainWindow.set_default_size(100,100)
                 
 		col_type=gtk.TreeViewColumn('Type')
 		col_type.set_resizable(True)
@@ -557,8 +563,8 @@ class ImportGDocsWindow():
 		self._DocTreeView.append_column(col_folders)
 
                 #The last str is to store the resource_id
-                DocList=gtk.ListStore(str,str,str,gobject.TYPE_PYOBJECT)
-		self._DocTreeView.set_model(DocList)
+                self._docList=gtk.ListStore(str,str,str,gobject.TYPE_PYOBJECT)
+		self._DocTreeView.set_model(self._docList)
 
                 #notifications
 		notified=False
@@ -594,7 +600,7 @@ class ImportGDocsWindow():
 
 				collectionList=str(collectionList)
 			
-				DocList.append([data[0],data[1],collectionList,doc])
+				self._docList.append([data[0],data[1],collectionList,doc])
 				#print doc.resource_id
 				#TODO: There's a more elegant way to do this
 				#http://faq.pygtk.org/index.py?req=show&file=faq13.015.htp
@@ -776,9 +782,41 @@ class ImportGDocsWindow():
 		error_dlg.destroy()
 
 
+	def list_docs_cb_toggled(self, args):
+		""" Gets called when listing option check box is toggle
+    
+		Arguments:
+		- `args`:
+		"""
+		#the new model to store the tree data
+		newModel=gtk.ListStore(str,str,str,gobject.TYPE_PYOBJECT)
 
+		#iterate through the default model
+		iter=self._docList.get_iter_first()
 
+                while iter:
 
+                        #if this entry is a document
+			if self._docList.get_value(iter,0)=='document':
+				#if documents should be added to the list
+				if self._cbListDocs.get_active():
+					newModel.append([self._docList.get_value(iter,0),self._docList.get_value(iter,1),self._docList.get_value(iter,2),self._docList.get_value(iter,3)])
+
+			#if this entry is a spreadsheet
+			if self._docList.get_value(iter,0)=='spreadsheet':
+				#if documents should be added to the list
+				if self._cbListSpreadsheets.get_active():
+					newModel.append([self._docList.get_value(iter,0),self._docList.get_value(iter,1),self._docList.get_value(iter,2),self._docList.get_value(iter,3)])
+
+			#if this entry is a presentation
+			if self._docList.get_value(iter,0)=='presentation':
+				#if documents should be added to the list
+				if self._cbListPresentations.get_active():
+					newModel.append([self._docList.get_value(iter,0),self._docList.get_value(iter,1),self._docList.get_value(iter,2),self._docList.get_value(iter,3)])
+			
+			iter=self._docList.iter_next(iter)
+
+		self._DocTreeView.set_model(newModel)
 
 
 if __name__ == "__main__":
