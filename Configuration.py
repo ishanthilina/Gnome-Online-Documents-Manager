@@ -5,10 +5,6 @@ import ConfigParser
 import Authentication
 
 
-##
-##This package's comments have not been properly checked.
-##
-##
 
 class ConfigurationManager():
     """Provides an interface to access and configure the extension settings
@@ -86,7 +82,6 @@ class ConfigurationManager():
         
                 
         # Writing our configuration file
-        #TODO - Correct file path
         with open(self._filePath, 'wb') as configfile:
             self._scp.write(configfile)
 
@@ -168,7 +163,7 @@ class ConfigurationManager():
             #if the system uses a direct connection
             else:
                 return [None,None]
-        
+        #get proxy Settings from file
         elif get_proxy_from=='file':
              http_proxy=self._scp.get("proxy_data","http")
              https_proxy=self._scp.get("proxy_data","https")
