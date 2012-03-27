@@ -50,7 +50,7 @@ class ConfigurationManager():
                 self._account=self._am.get_accounts()[accountName]
         
         
-
+    ##
     def get_persisted_account(self):
         """Returns the current (persisted) default account
         """
@@ -64,7 +64,7 @@ class ConfigurationManager():
         
         
         return None
-
+    ##
     def set_persisted_account(self, account):
         """Persists the default account
         
@@ -78,7 +78,7 @@ class ConfigurationManager():
         # Writing our configuration file
         with open(self._filePath, 'wb') as configfile:
             self._scp.write(configfile)
-
+    ##
     def set_persist_active(self):
         """Mark the persisted account as active
         """
@@ -90,6 +90,7 @@ class ConfigurationManager():
         with open('/home/ishan/4sep/settings.cfg', 'wb') as configfile:
             self._scp.write(configfile)
 
+    ##
     def get_persist_active(self):
         """Returns whether the persisted account is marked as active or not 
         """
@@ -98,12 +99,14 @@ class ConfigurationManager():
         else:
             return False
 
+    ##
     def get_account(self):
         """Returns the current selected account
         """
         
         return self._account
 
+    ##
     def set_account(self, account):
         """Sets the current Account
         
@@ -112,13 +115,14 @@ class ConfigurationManager():
         """
         self._account=account
         
-
+    ##
     def get_system_path(self):
         """Returns the path of the place where the python scripts are
         """
         
         return os.path.expanduser('~')+"/"+self._scp.get("file_path","path")
 
+    ##
     def set_proxy(self, http,https):
         """
         Sets proxy for the environment of the script
@@ -139,7 +143,7 @@ class ConfigurationManager():
             os.environ['http_proxy']=''
             os.environ['https_proxy']=''
             
-       
+    ##
     def get_proxy(self):
         """Returns the proxy settings as an array 
         Array[0]=http proxy settings
@@ -192,6 +196,7 @@ class ConfigurationManager():
         #     username = password = None
         return [mode,http_host+":"+http_port,https_host+":"+https_port]   
 
+    ##
     def persist_proxy(self, http,https):
         """
         
@@ -213,7 +218,7 @@ class ConfigurationManager():
         # Writing our configuration file
         with open(self._filePath, 'wb') as configfile:
             self._scp.write(configfile)
-        
+    ##   
     def set_proxy_type(self, type):
         """Persists the type of proxy that needs to be used
     
@@ -226,6 +231,7 @@ class ConfigurationManager():
         with open(self._filePath, 'wb') as configfile:
             self._scp.write(configfile)
 
+    ##
     def get_persited_proxy(self):
         """Returns the persisted proxy settings
         """
@@ -233,6 +239,7 @@ class ConfigurationManager():
         https_proxy=self._scp.get("proxy_data","https")
         return [http_proxy,https_proxy]
 
+    ##
     def get_proxy_from(self):
         """Returns from where the proxy settings are retrieved
         """
