@@ -2,8 +2,11 @@ import sys
 import os
 import subprocess
 from gi.repository import Gtk as gtk
+from gi.repository import Gdk
 from gi.repository import GObject as gobject
 from gi.repository import Notify as pynotify
+import time
+import threading
 
 import GDocs
 import Configuration
@@ -305,9 +308,15 @@ class ExportGDocsWindow():
 		builder.connect_signals(self)
 		
 		self._FolderTreeView=builder.get_object('FolderTreeView')
+		self._mainWindow=builder.get_object('mainWindow')
+		
 		
 		#self._FolderTreeView.
 		self._tbUploadName=builder.get_object('uploadName')
+
+                ##show the window before loading content
+		#threading.Thread(gtk.main())
+                
 
                 #get the file name from the file path
 		fName=filePath.split('.')[-2].split('/')[-1]+'.'+filePath.split('.')[-1]
@@ -342,6 +351,9 @@ class ExportGDocsWindow():
 	
 
                 self._FolderTreeView.set_model(self._folderList)
+
+                self._mainWindow.get_root_window().set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
+		
 
                 #add folder data
 		fHierarchy=self._gdam.get_folder_hierarchy()
@@ -386,6 +398,7 @@ class ExportGDocsWindow():
 		colFolder.pack_start(cell,False)
 		colFolder.add_attribute(cell,"text",0)
 
+		self._mainWindow.get_root_window().set_cursor(Gdk.Cursor(Gdk.CursorType.ARROW))
 	def add_children_to_list(self, folder,parent):
 		"""Adds a folder to the GUI ListStore
     
@@ -403,7 +416,10 @@ class ExportGDocsWindow():
 	def upload(self,arg1):
 		"""Upload a doc to Google docs upon GUI call
 		"""
-		
+
+                #Set the curosr to busy
+		self._mainWindow.get_root_window().set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
+		print 'ssss'
 		folders=self.get_selected_folders()
 
                 
@@ -415,7 +431,7 @@ class ExportGDocsWindow():
 		for folder in folders:
 			self._gdam.copy_resource_to_collection(folder,doc)
 		
-		
+		self._mainWindow.get_root_window().set_cursor(Gdk.Cursor(Gdk.CursorType.ARROW))
                 
 	def col1_toggled_cb( self, cell, path, model ):
 		"""
@@ -524,7 +540,7 @@ class ImportGDocsWindow():
 		
 		self._DocTreeView=builder.get_object('DocTreeView')
 		self._entry_fileSaveLocation=builder.get_object('fileSaveLocation')
-		
+		self._mainWindow=builder.get_object('mainWindow')
 
                 
 		col_type=gtk.TreeViewColumn('Type')
@@ -551,7 +567,9 @@ class ImportGDocsWindow():
 			n.show()
 			notified=True
 		
-		
+
+		self._mainWindow.get_root_window().set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
+                        
 		for doc in self._gdam.get_all_documents().entry:
 			data= self._gdam.get_doc_data(doc)
 			
@@ -595,6 +613,8 @@ class ImportGDocsWindow():
 		self._DocTreeView.get_selection().select_path(0)
 		
 
+                self._mainWindow.get_root_window().set_cursor(Gdk.Cursor(Gdk.CursorType.ARROW))
+                
 	def destroy_all(self,arg):
 		"""Destroy everything
 		"""
@@ -661,6 +681,14 @@ class ImportGDocsWindow():
 	def on_save_button(self,arg1 ):
 		"""Saves the given Doc
 		"""
+
+		#Set the curosr to busy
+		#time.sleep(10)
+		#print 'Hi'
+		self._mainWindow.get_root_window().set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
+		#self._mainWindow.set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
+		#print 'Chathu'
+                
 		filePath=self._entry_fileSaveLocation.get_text()
 		#file extension
 		ext=filePath.split('.')[-1]
@@ -706,7 +734,7 @@ class ImportGDocsWindow():
 			else:
 				self.show_error_dlg('Wrong file type. Supported file types include pptx')
 		
-		
+		#self._mainWindow.get_root_window().set_cursor(Gdk.Cursor(Gdk.CursorType.ARROW))
 
 	def on_save_n_open_button(self, arg1):
 		"""Saves the given doc and opens it in Libre office

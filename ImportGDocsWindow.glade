@@ -7,7 +7,9 @@
       <column type="GtkSortType"/>
     </columns>
   </object>
-  <object class="GtkWindow" id="window1">
+  <object class="GtkWindow" id="mainWindow">
+    <property name="width_request">500</property>
+    <property name="height_request">400</property>
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Import Google Document</property>
@@ -339,7 +341,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_action_appearance">False</property>
-                    <signal name="released" handler="on_save_button" swapped="no"/>
+                    <signal name="clicked" handler="on_save_button" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
