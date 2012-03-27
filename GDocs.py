@@ -11,13 +11,13 @@ import MyExceptions
 
 
 class GDClientManager():
-    """Handles the creation, authenitcation of GDocs clients
+    """Handles the creation and authentication of GDocs clients
     """
     
     def __init__(self,confMan):
         """
         """
-        self._client = gdata.docs.client.DocsClient(source='yourCo-yourAppName-v1')
+        self._client = gdata.docs.client.DocsClient(source='Gnome Online Documents Manager')
         self._client.ssl=True
         self._confMan=confMan
         
@@ -45,6 +45,7 @@ class GDClientManager():
         except gdata.client.Error:
             exit('Login Error')
 
+        #Set proxy for the system
         http_proxy=self._confMan.get_proxy()[0]
         https_proxy=self._confMan.get_proxy()[1]
        

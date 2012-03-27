@@ -5,6 +5,11 @@ import ConfigParser
 import Authentication
 
 
+##
+##This package's comments have not been properly checked.
+##
+##
+
 class ConfigurationManager():
     """Provides an interface to access and configure the extension settings
     """
