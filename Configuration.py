@@ -87,7 +87,7 @@ class ConfigurationManager():
                 
         # Writing our configuration file
         #TODO - Correct file path
-        with open('/home/ishan/4sep/settings.cfg', 'wb') as configfile:
+        with open(self._filePath, 'wb') as configfile:
             self._scp.write(configfile)
 
     ##
