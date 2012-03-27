@@ -572,32 +572,40 @@ class ImportGDocsWindow():
 		self._mainWindow.get_root_window().set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
                         
 		for doc in self._gdam.get_all_documents().entry:
-			data= self._gdam.get_doc_data(doc)
-			
-			#Get collection info
-			collectionList=None
-                        for entry in doc.InCollections():
-				for title in entry.GetAttributes(tag='title'):
-					collectionList=title.value+','
 
-			if collectionList:
+                        #list only if the doc is a document/spreadsheet/presentation
+
+                        if doc.GetResourceType() in ['document','spreadsheet','presentation']:
+				
+				data= self._gdam.get_doc_data(doc)
+			
+				#Get collection info
+				collectionList=None
+				for entry in doc.InCollections():
+					for title in entry.GetAttributes(tag='title'):
+						if not collectionList:
+							collectionList=''
+							collectionList+=title.value+','
+							
+							
+				if collectionList:
 				#remove the last comma
-				collectionList=collectionList[0:len(collectionList)-1]
+					collectionList=collectionList[0:len(collectionList)-1]
 
-			collectionList=str(collectionList)
+				collectionList=str(collectionList)
 			
-			DocList.append([data[0],data[1],collectionList,doc])
-			#print doc.resource_id
-			#TODO: There's a more elegant way to do this
-			#http://faq.pygtk.org/index.py?req=show&file=faq13.015.htp
+				DocList.append([data[0],data[1],collectionList,doc])
+				#print doc.resource_id
+				#TODO: There's a more elegant way to do this
+				#http://faq.pygtk.org/index.py?req=show&file=faq13.015.htp
 			
 			
 
-			#itr=DocList.append([1,'2','3'])
-		#DocList.insert_after(itr,[2,"2",'2'])
-		#DocList.append(["1","2","3","R_ID"])
+				#itr=DocList.append([1,'2','3'])
+				#DocList.insert_after(itr,[2,"2",'2'])
+				#DocList.append(["1","2","3","R_ID"])
 
-                #If a notification has been raised
+				#If a notification has been raised
 		if notified:
 			n.close()
 		
