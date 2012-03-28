@@ -28,7 +28,7 @@ class GDClientManager():
         """Authenticates the GDocs client using the Account object passed to it
         
         Arguments:
-        - `account`:
+        - `account`:Authentication.Account
         """
 
         
@@ -36,7 +36,8 @@ class GDClientManager():
         self._CONSUMER_SECRET=account.get_consumer_secret()
         self._TOKEN=account.get_access_token()
         self._TOKEN_SECRET=account.get_access_token_secret()
-        
+
+        #try to authenticate
         try:
             self._client.auth_token = gdata.gauth.OAuthHmacToken(self._CONSUMER_KEY, self._CONSUMER_SECRET, self._TOKEN,
                                                self._TOKEN_SECRET, gdata.gauth.ACCESS_TOKEN)
@@ -84,7 +85,7 @@ class GDActionsManager():
 
 
    
-    #
+    
     def get_all_documents(self):
         """Get and display all resources, using pagination."""
         client=self.__create_client()
@@ -94,21 +95,7 @@ class GDActionsManager():
 
         return feed
        
-    # def get_all_folders(self):
-    #     """Returns a list of all the folsers in the server
-    #     """
-    #     client=self.__create_client()
-
-    #     feed = client.GetResources(uri=gdata.docs.client.RESOURCE_FEED_URI+'?showfolders=true')
-
-    #     folders=[]
-        
-    #     for entry in feed.entry:
-    #         if entry.GetResourceType()=='folder':
-    #             folders.append(entry)
-                
-
-    #     return folders
+   
 
     def get_sub_folders(self, entry):
         """Returns all the sub Folders
@@ -123,8 +110,7 @@ class GDActionsManager():
 
         return subFolders
 
-    ##
-    #TODO: Implement the functionality correctly
+   
     def get_folder_hierarchy(self):
         """Returns the folder hierarchy in Google Docs
         """
@@ -144,82 +130,34 @@ class GDActionsManager():
 
         return folderHierarchy
 
-        # #store all the folders to iterate
-        # folders=[]
-        # #to store the folder structure
-        # folStruct=[]
-        # #print rootFolders
-        # ##What happens if there are no sub folders...?
-        # for folder in rootFolders.entry:
-        #     # print self.get_doc_data(folder)
-        #     folders.append(folder)
-
-        # #iterate through all the folders
-        # #for folder in folders:
-        #     #subFolders=self.get_sub_folders(folder)
-        #     #   print folder.title.text
-
-        #     #add the sub folders to the list
-        #     #            for subF in subFolders.entry:
-        #     #   print subF.title.text
+       
         
-        # return folders
-        
-        
-    ##
+    
     def download_doc(self, entry,path,format):
         """Downloads a given entry to the path under a given name
         
         Arguments:
         - `entry`:gdata.docs.data.Resource
-        - `path`:string
-        - `name`:string
+        - `path`:string - path where the doc should be saved
+        - `name`:string - name in which the doc should be saved
         - `format`:String- format to be downloaded
         """
         client=self.__create_client()
 
-        #type of the document
-        #doc_type=None
-
-        #deterimine the document type
-        #TODO- Edit the logic of the code to allow the user to modify the extension
-        # if entry.GetResourceType() == 'document':
-
-        #     doc_type=".odt"
-
-        # elif entry.GetResourceType() == 'spreadsheet':
-        #     doc_type=".pdf"
-            
-        # full_path=os.path.join(path,name+doc_type)
-        # print full_path
         
         client.DownloadResource(entry,path,extra_params={'exportFormat': format})
-    #TODO:deprecated method. replace with download_doc
+   
     
-    # def download_spreadsheet(self, path,entry,format):
-    #     """Downloads the given spreadsheet
-    
-    # Arguments:
-    # - `path`:String-path to download the spreadsheet
-    # - `entry`:String - Resource
-    # - `format`:String- format to be downloaded
-    # """
-    #     client=self.__create_client()
-    #     client.DownloadResource(entry,path,extra_params={'exportFormat': format})
-
-    ##    
     def upload_new_doc(self, path,col,doc_title):
         """Uploads a new document to Google Docs
         
     
         Arguments:
         - `path`:String
-        - `Col`:<collectio object>
+        - `Col`:<collection object>
         - `doc_title`:The title of the doc
         """
-        #TODO:
-        #Add collection selection support
-        #Add spreadsheet,presentations upload support
+       
 
         client=self.__create_client()
 
@@ -235,13 +173,7 @@ class GDActionsManager():
             return doc
 
         doc = client.CreateResource(doc,media=media, create_uri=gdata.docs.client.RESOURCE_UPLOAD_URI+'/'+col.resource_id.text+'/contents')
-        # newResource = gdata.docs.data.Resource(path, "document title")
-
-        # media = gdata.data.MediaSource()
-        # media.SetFileHandle(path,'application/msword')
-
-        # doc = client.CreateResource(newResource, create_uri=gdata.docs.client.RESOURCE_UPLOAD_URI, media=media,collection=col)
-
+        
         
         return doc
 
@@ -249,9 +181,9 @@ class GDActionsManager():
     def create_collection(self, name):
         """Creates a Collection in Google Docs
     
-    Arguments:
-    - `name`: name of the collection
-    """
+        Arguments:
+        - `name`: name of the collection
+        """
         client=self.__create_client()
         col = gdata.docs.data.Resource(type='folder', title=name)
         col= client.CreateResource(col)
@@ -261,28 +193,18 @@ class GDActionsManager():
         """Updates a document in the server
     
         Arguments:
-        - `entry`:
+        - `entry`: gdata.docs.Resource
         - `path`: String- path to the document
         """
         client=self.__create_client()
         media = gdata.data.MediaSource()
         media.SetFileHandle(path, 'application/msword')
 
-        # print entry.resource_id.text
-        #doc=client.UpdateResource(entry)
+       
         doc=client.UpdateResource(entry,media=media,update_metadata=False,new_revision=True,force=True)
         return doc
 
-    def _get_doc_type(self,entry):
-        """Returns the type of the document
-
-        Arguments:
-        - `entry`:gdata.docs.data.Resource
-            
-        """
-        print 'Doc type:', entry.GetResourceType()
-
-    ##
+    
     def copy_resource_to_collection(self, collection,resource):
         """Copies the given resource to the given collection
     
@@ -293,7 +215,7 @@ class GDActionsManager():
         client=self.__create_client()
         client.MoveResource(resource,collection,keep_in_collections=True)
         
-    ##
+    
     def get_doc_data(self, entry):
         """Provides metadata on a given resource
         
@@ -302,24 +224,7 @@ class GDActionsManager():
         
         """
         
-        # print '\n'
-        # print '=================================================='
-        # print 'Doc type:', entry.GetResourceType()
-        # print 'Doc name: ', entry.title.text
-        # print 'Resource id:', entry.resource_id.text
-        # print 'Lables :'
-        # for label in entry.GetLabels():
-        #     print label,
-
-        # print
-
-        # print
-        # print 'Collections (Folders): '
-
-        # for data in entry.InCollections():
-        #     for title in  data.GetAttributes(tag='title'):
-        #         print title.value
-
+       
         return [entry.GetResourceType(),entry.title.text,entry.resource_id.text]
 
 
