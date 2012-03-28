@@ -12,24 +12,7 @@ import GDocs
 import Configuration
 import Authentication
 import factory
-# try:
-	
-# 	import pynotify
-# except:
-# 	pass
 
-# try:
-#  	import pygtk
-#   	pygtk.require("2.0")
-# except:
-#   	pass
-# try:
-# 	import gtk
-#   	import gtk.glade
-# except:
-# 	sys.exit(1)
-
-#import gobject
 
 class GUIManager():
 	"""Provides an interface to access the GUI functionality
@@ -38,6 +21,7 @@ class GUIManager():
 	def __init__(self):
 		"""
 		"""
+		#the factory to create the instances
 		objFactory=factory.Factory()
                 
 		#get the instances
@@ -56,7 +40,7 @@ class GUIManager():
 		"""Shows the import Google Documents window"""
 
                 window=ImportGDocsWindow(self._gdam,self._confMan)
-		#window=MainWindow()
+		
 
 	def show_export_window(self,filePath):
 		"""Shows the export Documents window
@@ -84,15 +68,13 @@ class SettingsWindow():
 		-`accMan`:Authentication.AccountManager
 		-`gdcm`:GDocs.GDClientManager
                 """
-		#self._gdam = gdam
+		
 		self._confMan=confMan
 		self._accMan=accMan
 		self._gdcm=gdcm
 		
 
                 #load and setup the GUI components
-
-               
 		filename = confMan.get_system_path()+"SettingsWindow.glade"
 		builder = gtk.Builder()
 		builder.add_from_file(filename)
@@ -135,7 +117,7 @@ class SettingsWindow():
 		self._tbHttpsPort.set_text(httpsPort)
 		
 		
-		
+		#to list the accounts
 		accList=gtk.ListStore(str,gobject.TYPE_PYOBJECT )
 		
 		cell = gtk.CellRendererText()
@@ -147,7 +129,7 @@ class SettingsWindow():
 		for accName,accObj in self._accMan.get_accounts().iteritems():
 			
 			accList.append([accName,accObj])
-			#pass
+			
                 
 		self._accountsList.set_active(0)
 
@@ -180,14 +162,14 @@ class SettingsWindow():
 	
 		
 	def cb_use_the_acc_selected(self,arg):
-		"""Event handler
+		"""Event handler for rbFromPersist
 		"""
 	
 		self._accountsList.set_sensitive(False)
 		self._cbRememberAcc.set_sensitive(False)
 
 	def cb_from_list_selected(self,arg):
-		"""Event handler
+		"""Event handler for rbFromList
 		"""
 		self._accountsList.set_sensitive(True)
 		self._cbRememberAcc.set_sensitive(True)
@@ -196,16 +178,16 @@ class SettingsWindow():
 		"""Action handler for the Ok button
     
 		Arguments:
-		- `args`:
+		- `args`: Gtk.Button
 		"""
 		self.apply_but_clicked(args)
 		self.destroy_all(args)
 
 	def apply_but_clicked(self, args):
-		"""
+		"""Action handler for the Apply button
 		
 		Arguments:
-		- `args`:
+		- `args`:Gtk.Button
 		"""
 		##Handle Account settings first
 
@@ -260,7 +242,9 @@ class SettingsWindow():
 	def show_error_dlg(self, error_string):
 		"""This Function is used to show an error dialog when
 		an error occurs.
-		error_string - The error string that will be displayed
+
+                Arguments:
+		- `args`:error_string - The error string that will be displayed
 		on the dialog.
 		"""
 		error_dlg = gtk.MessageDialog(type=gtk.MessageType.ERROR
@@ -273,9 +257,9 @@ class SettingsWindow():
 	def disable_custom_proxy(self, args):
 		"""Disables the custom proxy related widgets
     
-    Arguments:
-    - `args`:
-    """
+		Arguments:
+		- `args`:
+		"""
 		self._tbHttp.set_sensitive(False)
 		self._tbHttps.set_sensitive(False)
 		self._tbHttpPort.set_sensitive(False)
@@ -283,11 +267,11 @@ class SettingsWindow():
 
 
 	def enable_custom_proxy(self, args):
-		"""Disables the custom proxy related widgets
+		"""Enables the custom proxy related widgets
     
-    Arguments:
-    - `args`:
-    """
+		Arguments:
+		- `args`:
+		"""
 		self._tbHttp.set_sensitive(True)
 		self._tbHttps.set_sensitive(True)
 		self._tbHttpPort.set_sensitive(True)
@@ -313,9 +297,11 @@ class ExportGDocsWindow():
                 Arguments:
                 - `gdam`:GDocs.GDActionsManager
 		- `confMan`:Configuration.ConfigurationManager
+		- `filePath`:Configuration.ConfigurationManager
                 """
 		self._gdam = gdam
 		self._confMan=confMan
+		
 		#set the file path properly
 		self._filePath=filePath[7:]
 		
@@ -332,16 +318,15 @@ class ExportGDocsWindow():
 		builder = gtk.Builder()
 		builder.add_from_file(filename)
 		builder.connect_signals(self)
-		
+
+                #get the widgets
 		self._FolderTreeView=builder.get_object('FolderTreeView')
 		self._mainWindow=builder.get_object('mainWindow')
 		
 		
-		#self._FolderTreeView.
+		
 		self._tbUploadName=builder.get_object('uploadName')
 
-                ##show the window before loading content
-		#threading.Thread(gtk.main())
                 
 
                 #get the file name from the file path
@@ -353,12 +338,12 @@ class ExportGDocsWindow():
 		self._FolderTreeView.append_column(col_name)
 
 		self._folderList=gtk.TreeStore( gobject.TYPE_STRING,gobject.TYPE_BOOLEAN,gobject.TYPE_PYOBJECT )
-		#self._folderList=gtk.TreeStore( gobject.TYPE_BOOLEAN,gobject.TYPE_STRING,gobject.TYPE_PYOBJECT )
+		
                 renderer=gtk.CellRendererToggle()
 		renderer.set_property('activatable', True)
-		#renderer.set_property('width',20)
+		
 		renderer.connect( 'toggled', self.col1_toggled_cb, self._folderList )
-		#renderer.set_sensitive(True)
+		
 
                 colFolder=gtk.TreeViewColumn('Folder Name',renderer)
 		colFolder.add_attribute(renderer, "active", 1)
@@ -405,7 +390,7 @@ class ExportGDocsWindow():
 				child=folderList.pop(0)
 				#add the item to GUI
 				parentNode=self._folderList.append(parentNode,(child[1].get_folder().title.text,None,child[1].get_folder()))
-				#parentNode=self._folderList.append(parentNode,(child[1].get_folder(),None,child[1].get_folder().title.text))
+				
 				#iterate through its children and add them to folderList
 				for entry in child[1].get_children():
 					folderList.append([parentNode,entry])
@@ -420,7 +405,7 @@ class ExportGDocsWindow():
                 
 		cell = gtk.CellRendererText()
 		cell.set_property( 'editable', True )
-		#cell.set_property('height',20)
+		
 		colFolder.pack_start(cell,False)
 		colFolder.add_attribute(cell,"text",0)
 
@@ -501,7 +486,7 @@ class ExportGDocsWindow():
 		
 		
                 rootIter=self._folderList.get_iter_first()
-		#	path=self._folderList.get_path(iter)
+	
 
 
                 
@@ -558,8 +543,6 @@ class ImportGDocsWindow():
 
                 #load and setup the GUI components
 
-                #TODO: Create a good way to get the file locations.From the
-		#ConfigurationManager may be?
 		filename = confMan.get_system_path()+"ImportGDocsWindow.glade"
 		builder = gtk.Builder()
 		builder.add_from_file(filename)
@@ -596,7 +579,7 @@ class ImportGDocsWindow():
 		notified=False
                 if pynotify.init("Gnome Google Documents Manager"):
 			n = pynotify.Notification.new("Gnome Google Documents Manager", "\n Your Google Documents list is being downloaded. Please wait.","dialog-information")
-			#n.set_timeout()
+			n.set_timeout(5)
 			n.show()
 			notified=True
 		
@@ -627,17 +610,8 @@ class ImportGDocsWindow():
 				collectionList=str(collectionList)
 			
 				self._docList.append([data[0],data[1],collectionList,doc])
-				#print doc.resource_id
-				#TODO: There's a more elegant way to do this
-				#http://faq.pygtk.org/index.py?req=show&file=faq13.015.htp
-			
-			
 
-				#itr=DocList.append([1,'2','3'])
-				#DocList.insert_after(itr,[2,"2",'2'])
-				#DocList.append(["1","2","3","R_ID"])
-
-				#If a notification has been raised
+		#If a notification has been raised
 		if notified:
 			n.close()
 		
@@ -646,11 +620,11 @@ class ImportGDocsWindow():
 		col_type.add_attribute(cell,"text",0)
 
                 self._but_save=builder.get_object('but_save')
-		#self._but_save.set_visible(False)
+		
 
 
 
-                #select the default entry in the list
+               
 		self._DocTreeView.get_selection().select_path(0)
 		
 
@@ -681,16 +655,7 @@ class ImportGDocsWindow():
 				, action=gtk.FileChooserAction.SAVE
 				, buttons=dialog_buttons)
 
-                # filter = gtk.FileFilter()
-		# filter.set_name("*.odt")
-		# filter.add_pattern("*.odt")
-		# file_dialog.add_filter(filter)
-
-                # filter = gtk.FileFilter()
-		# filter.set_name("*.doc")
-		# filter.add_pattern("*.doc")
-		# file_dialog.add_filter(filter)
-
+              
 		##set the default name
 		treeModel=self._DocTreeView.get_selection().get_selected_rows()[0]
 		path=self._DocTreeView.get_selection().get_selected_rows()[1]
@@ -724,12 +689,7 @@ class ImportGDocsWindow():
 		"""
 
 		#Set the curosr to busy
-		#time.sleep(10)
-		#print 'Hi'
-		#self._mainWindow.get_root_window().set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
-		#self._mainWindow.set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
-		#print 'Chathu'
-                
+		                
 		filePath=self._entry_fileSaveLocation.get_text()
 		#file extension
 		ext=filePath.split('.')[-1]
@@ -748,7 +708,7 @@ class ImportGDocsWindow():
 		#get the selected resource
                 treeModel=self._DocTreeView.get_selection().get_selected_rows()[0]
 		path=self._DocTreeView.get_selection().get_selected_rows()[1]
-		#print path[0]
+	
 		iter=treeModel.get_iter(path[0])
 		resource= treeModel.get_value(iter,3)
 
@@ -763,7 +723,7 @@ class ImportGDocsWindow():
 		elif resource.GetResourceType()=='spreadsheet':
 			#if the extension matches
 			if ext in ['xls','ods']:
-				#TODO:deprecated method. replace with download_doc
+				
 				self._gdam.download_doc(resource,filePath,ext)
 			else:
 				self.show_error_dlg('Wrong file type.Supported file types are xls,doc')
@@ -772,18 +732,18 @@ class ImportGDocsWindow():
 
                         #if the extension matches
 			if ext in ['ppt','pptx']:
-				#TODO:deprecated method. replace with download_doc
+				
 				self._gdam.download_doc(resource,filePath,ext)
 			else:
 				self.show_error_dlg('Wrong file type. Supported file types include pptx')
 		
-		#self._mainWindow.get_root_window().set_cursor(Gdk.Cursor(Gdk.CursorType.ARROW))
+	
 
 	def on_save_n_open_button(self, arg1):
 		"""Saves the given doc and opens it in Libre office
     
 		Arguments:
-		- `arg1`:
+		- `arg1`: GtkButton
 		"""
 		filePath=self._entry_fileSaveLocation.get_text()
 		if len(filePath)==0:
@@ -792,7 +752,7 @@ class ImportGDocsWindow():
 		self.on_save_button(arg1)
 
 		subprocess.Popen(['soffice', self._entry_fileSaveLocation.get_text()])
-		#os.system("soffice "+self._entry_fileSaveLocation.get_text())
+		
 		self.destroy_all(None)
 
 	def show_error_dlg(self, error_string):
