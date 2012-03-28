@@ -9,7 +9,7 @@ Git: https://github.com/ishanthilina/Gnome-Online-Documents-Manager
 import unittest
 
 import Configuration
-
+import Authentication
 
 
 class ConfigurationManagerTestCase(unittest.TestCase):
@@ -22,24 +22,17 @@ class ConfigurationManagerTestCase(unittest.TestCase):
 	self.confMan=Configuration.ConfigurationManager()
     
 
-    def test_persist_proxy(self):
-	"""Tests the get_proxy method	
-	"""
-	
-	self.confMan.persist_proxy('1','2','3','4')
-	print self.confMan.get_proxy()
-	#self.assertEqual(['1:2','3:4'],self.confMan.get_proxy(),'Proxy values does not match')
-
-    def test_get_system_path(self):
-	"""Tests the get_system_path() method
-	"""
-	print self.confMan.get_system_path()
-
+    def test_get_persist_active(self):
+        """Tests the get_persist_active() method
+        
+        """
+        self.assertIsInstance(self.confMan.get_persist_active(),bool,'Type mismatch')
+        
     def test_get_account(self):
-	"""Returns the google account the user has selected
-	
-	"""
-	print self.confMan.get_account()
+        """Tests the get_acccount() method
+        """
+        self.assertIsInstance(self.confMan.get_account(),Authentication.Account,'Type mismatch')
+        
 	
         
 

@@ -239,7 +239,7 @@ class FolderGraphNode():
     def __init__(self,folder,gdam):
         """folder: gdata.resource corresponding to a folder
         """
-        print folder.title.text
+        
         self._folder=folder
         self._folderHierarchy=[]
         self._gdam=gdam
