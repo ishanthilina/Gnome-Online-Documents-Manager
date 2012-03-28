@@ -14,7 +14,7 @@ class Account():
     """A class to store account details
     """
     
-    def __init__(self, consumerKey, consumerSecret, accessToken,accessTokenSecret,email):
+    def __init__(self, consumerKey, consumerSecret, accessToken,access_token_secret,email):
         """
         
         Arguments:
@@ -27,7 +27,7 @@ class Account():
         self._consumerKey = consumerKey
         self._consumerSecret = consumerSecret
         self._accessToken = accessToken
-        self._accessTokenSecret = accessTokenSecret
+        self._access_token_secret = access_token_secret
         self._email=email
         
 
@@ -50,7 +50,7 @@ class Account():
     def get_access_token_secret(self):
         """returns the access token secret of the account
         """ 
-        return self._accessTokenSecret
+        return self._access_token_secret
 
     def get_email(self):
         """Returns the email of the account
@@ -93,10 +93,10 @@ class AccountManager(unohelper.Base):
                 #get other important OAuth info
                 oauth_iface=DBusConnector.DBusConnector().get_dbus_oauth_iface(entry)
                 accessToken= oauth_iface.GetAccessToken()[0].encode('utf8')
-                accessTokenSecret=oauth_iface.GetAccessToken()[1].encode('utf8')
+                access_token_secret=oauth_iface.GetAccessToken()[1].encode('utf8')
 
                 #Create an account
-                cl=Account(consumerKey,consumerSecret , accessToken, accessTokenSecret,email )
+                cl=Account(consumerKey,consumerSecret , accessToken, access_token_secret,email )
                 accounts_dic[email]=cl
 
  

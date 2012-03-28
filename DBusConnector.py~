@@ -38,7 +38,7 @@ class DBusConnector():
         accProxy=bus.get_object('org.gnome.OnlineAccounts',
                            account)
         #create an interface
-        oauthIface=dbus.Interface(accProxy, dbus_interface='org.gnome.OnlineAccounts.OAuthBased')
+        oauth_iface=dbus.Interface(accProxy, dbus_interface='org.gnome.OnlineAccounts.OAuthBased')
         
         
-        return oauthIface
+        return oauth_iface

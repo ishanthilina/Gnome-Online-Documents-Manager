@@ -144,12 +144,12 @@ class ConfigurationManager():
         Array[1]=https proxy settings
         """
         #find out from where to get the proxy settings
-        get_proxy_from=str(self._scp.get("proxy_data","get_from"))
+        getProxyFrom=str(self._scp.get("proxy_data","get_from"))
 
         #act accordingly
         
         #get proxy settings from system
-        if get_proxy_from=='system':
+        if getProxyFrom=='system':
             
             proxyData=self.__get_sytem_proxy_settings()
             mode=proxyData[0]
@@ -163,7 +163,7 @@ class ConfigurationManager():
             else:
                 return [None,None]
         #get proxy Settings from file
-        elif get_proxy_from=='file':
+        elif getProxyFrom=='file':
              http_proxy=self._scp.get("proxy_data","http")
              https_proxy=self._scp.get("proxy_data","https")
              return [http_proxy,https_proxy]
