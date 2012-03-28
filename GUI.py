@@ -1,3 +1,11 @@
+"""
+Author: Ishan Thilina Somasiri
+E-mail: ishan@ishans.info
+Web: www.blog.ishans.info
+Git: https://github.com/ishanthilina/Gnome-Online-Documents-Manager
+"""
+
+
 import sys
 import os
 import subprocess
@@ -351,6 +359,7 @@ class ExportGDocsWindow():
 		colFolder.set_resizable(True)
 		self._FolderTreeView.append_column(colFolder)
 
+                
                 #notifications
 		notified=False
                 if pynotify.init("Gnome Google Documents Manager"):
@@ -369,6 +378,7 @@ class ExportGDocsWindow():
                 #add folder data
 		fHierarchy=self._gdam.get_folder_hierarchy()
 		
+		
                 parent=None
                 for folder in fHierarchy:
 
@@ -378,6 +388,7 @@ class ExportGDocsWindow():
 			folderList=[]
 			#add the root folder
                         folderList.append([None,folder])
+			
 
                         #set the parent to null
 			parentNode=None
@@ -825,6 +836,5 @@ if __name__ == "__main__":
 		        
 	        	guiM.show_settings_window()
 	
-	#
-	#t=Test()
+	
 	gtk.main()

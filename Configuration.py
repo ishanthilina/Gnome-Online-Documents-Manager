@@ -1,3 +1,11 @@
+"""
+Author: Ishan Thilina Somasiri
+E-mail: ishan@ishans.info
+Web: www.blog.ishans.info
+Git: https://github.com/ishanthilina/Gnome-Online-Documents-Manager
+"""
+
+
 from gi.repository import Gio
 import os
 import ConfigParser
