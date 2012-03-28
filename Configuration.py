@@ -44,6 +44,11 @@ class ConfigurationManager():
 
             if accountName in self._am.get_accounts():
                 self._account=self._am.get_accounts()[accountName]
+
+        #if there's no default account set
+        else:
+            #get the default account
+            self._account=self._am.get_accounts().itervalues().next()
         
         
     ##

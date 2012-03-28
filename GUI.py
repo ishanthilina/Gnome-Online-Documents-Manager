@@ -11,6 +11,7 @@ import threading
 import GDocs
 import Configuration
 import Authentication
+import factory
 # try:
 	
 # 	import pynotify
@@ -37,13 +38,18 @@ class GUIManager():
 	def __init__(self):
 		"""
 		"""
-		#TODO: Find an elegant way to do this.
-		self._confMan=Configuration.ConfigurationManager()
-		account=self._confMan.get_account()
-		self._gdcm=GDocs.GDClientManager(self._confMan)
-		self._gdam=GDocs.GDActionsManager(self._gdcm)
-		self._gdcm.authenticate_client(account)
-		self._accMan=Authentication.AccountManager()
+		objFactory=factory.Factory()
+                
+		#get the instances
+		self._gdcm=objFactory.get_gdClient_man()
+		self._gdam=objFactory.get_gdActions_man()
+		self._confMan=objFactory.get_configuration_man()
+		self._accMan=objFactory.get_account_man()
+		
+		
+		
+		
+		
 
 
 	def show_import_window(self):
@@ -205,6 +211,12 @@ class SettingsWindow():
 
                 ##if account needs to be loaded from persistence
 		if self._rbFromPersist.get_active():
+			#if the account is null
+                        if self._accLabel.get_text()=='None':
+				self.show_error_dlg('Please select a valid account')
+				self._rbFromList.set_active(True)
+				return
+			
 			account=self._confMan.get_persisted_account()
 			self._confMan.set_account(account)
 			self._gdcm.authenticate_client(account)
@@ -243,6 +255,20 @@ class SettingsWindow():
 			https=self._tbHttps.get_text()+':'+self._tbHttpsPort.get_text()
 			self._confMan.set_proxy(http,https)
 			self._confMan.persist_proxy(http,https)
+
+
+	def show_error_dlg(self, error_string):
+		"""This Function is used to show an error dialog when
+		an error occurs.
+		error_string - The error string that will be displayed
+		on the dialog.
+		"""
+		error_dlg = gtk.MessageDialog(type=gtk.MessageType.ERROR
+					      , message_format=error_string
+					      , buttons=gtk.ButtonsType.OK)
+		error_dlg.run()
+		error_dlg.destroy()
+
 
 	def disable_custom_proxy(self, args):
 		"""Disables the custom proxy related widgets
