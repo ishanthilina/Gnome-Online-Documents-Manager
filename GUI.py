@@ -432,8 +432,8 @@ class ExportGDocsWindow():
 		#add each child to the tree
 		for child in folder.get_children():
 			parentNode=self._folderList.append(parent,(child.get_folder().title.text,None,child.get_folder()))
-			#add the children of this folder
-			#self.add_children_to_list(folder,parentNode)
+			
+		
                 
 
 	def upload(self,arg1):
@@ -441,7 +441,7 @@ class ExportGDocsWindow():
 		"""
 
                 #Set the curosr to busy
-		self._mainWindow.get_root_window().set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
+		#self._mainWindow.get_root_window().set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
 		print 'ssss'
 		folders=self.get_selected_folders()
 
@@ -454,7 +454,9 @@ class ExportGDocsWindow():
 		for folder in folders:
 			self._gdam.copy_resource_to_collection(folder,doc)
 		
-		self._mainWindow.get_root_window().set_cursor(Gdk.Cursor(Gdk.CursorType.ARROW))
+			#self._mainWindow.get_root_window().set_cursor(Gdk.Cursor(Gdk.CursorType.ARROW))
+		self.show_succ_dlg('File upload succeeded')
+		self.destroy_all(None)
                 
 	def col1_toggled_cb( self, cell, path, model ):
 		"""
@@ -533,6 +535,15 @@ class ExportGDocsWindow():
 		on the dialog.
 		"""
 		error_dlg = gtk.MessageDialog(type=gtk.MessageType.ERROR
+					      , message_format=error_string
+					      , buttons=gtk.ButtonsType.OK)
+		error_dlg.run()
+		error_dlg.destroy()
+
+	def show_succ_dlg(self, error_string):
+		"""This Function is used to show the succes dialog 
+		"""
+		error_dlg = gtk.MessageDialog(type=gtk.MessageType.INFO
 					      , message_format=error_string
 					      , buttons=gtk.ButtonsType.OK)
 		error_dlg.run()
