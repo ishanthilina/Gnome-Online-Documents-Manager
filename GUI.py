@@ -441,7 +441,7 @@ class ExportGDocsWindow():
 		"""
 
                 #Set the curosr to busy
-		#self._mainWindow.get_root_window().set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
+		self._mainWindow.get_root_window().set_cursor(Gdk.Cursor(Gdk.CursorType.WATCH))
 		print 'ssss'
 		folders=self.get_selected_folders()
 
@@ -454,7 +454,7 @@ class ExportGDocsWindow():
 		for folder in folders:
 			self._gdam.copy_resource_to_collection(folder,doc)
 		
-			#self._mainWindow.get_root_window().set_cursor(Gdk.Cursor(Gdk.CursorType.ARROW))
+		self._mainWindow.get_root_window().set_cursor(Gdk.Cursor(Gdk.CursorType.ARROW))
 		self.show_succ_dlg('File upload succeeded')
 		self.destroy_all(None)
                 
